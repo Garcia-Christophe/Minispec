@@ -1,33 +1,31 @@
-package root;
+package m2tiil.monpackage;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
 
 public class Satellite extends MobilElement {
 
-	private List<Balise> beaconsList;
+	private ArrayList<Balise> beaconsList;
 
-	private Set<Balise> beaconsSet;
+	private HashSet<Balise> beaconsSet;
 
-	private List<Balise> beaconsBag;
+	private ArrayList<Balise> beaconsBag;
 
 	public Satellite() {
-		this.beaconsList = new ArrayList<>();
-		this.beaconsSet = new HashSet<>();
-		this.beaconsBag = new ArrayList<>();
+		this.beaconsList = new ArrayList<Balise>();
+		this.beaconsSet = new HashSet<Balise>();
+		this.beaconsBag = new ArrayList<Balise>();
 	}
 
 	public boolean isBeaconsListValid() {
 		return this.beaconsList.size() >= 0 && this.beaconsList.size() <= 10;
 	}
 
-	public void setBeaconsList(List<Balise> beaconsList) {
+	public void setBeaconsList(ArrayList<Balise> beaconsList) {
 		this.beaconsList = beaconsList;
 	}
 
-	public List<Balise> getBeaconsList() {
+	public ArrayList<Balise> getBeaconsList() {
 		return this.beaconsList;
 	}
 
@@ -35,11 +33,11 @@ public class Satellite extends MobilElement {
 		return this.beaconsSet.size() >= 2 && this.beaconsSet.size() <= 10;
 	}
 
-	public void setBeaconsSet(Set<Balise> beaconsSet) {
+	public void setBeaconsSet(HashSet<Balise> beaconsSet) {
 		this.beaconsSet = beaconsSet;
 	}
 
-	public Set<Balise> getBeaconsSet() {
+	public HashSet<Balise> getBeaconsSet() {
 		return this.beaconsSet;
 	}
 
@@ -47,11 +45,11 @@ public class Satellite extends MobilElement {
 		return this.beaconsBag.size() >= 0 && this.beaconsBag.size() <= 2147483647;
 	}
 
-	public void setBeaconsBag(List<Balise> beaconsBag) {
+	public void setBeaconsBag(ArrayList<Balise> beaconsBag) {
 		this.beaconsBag = beaconsBag;
 	}
 
-	public List<Balise> getBeaconsBag() {
+	public ArrayList<Balise> getBeaconsBag() {
 		return this.beaconsBag;
 	}
 
