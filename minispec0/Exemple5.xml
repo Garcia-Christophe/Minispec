@@ -6,11 +6,13 @@
 	<!-- exemple : le model de l'entite #30 est pointé par son attribut model 
 		avec #1 -->
 	<Model id="#1" />
-	<Entity model="#1" id="#20" name="Balise" subtypeof="#10"/>
-	<Attribute entity="#20" id="#21" name="nom" />
-	<NamedType attribute="#21" id="#211" name="String" />
-	<Attribute entity="#20" id="#22" name="id" />
-	<NamedType attribute="#22" id="#221" name="Integer" />
+	<Entity model="#1" id="#10" name="MobilElement" />
+	<Attribute entity="#10" id="#11" name="nom" />
+	<NamedType attribute="#11" id="#111" name="String" />
+	<Attribute entity="#10" id="#12" name="id" />
+	<NamedType attribute="#12" id="#121" name="Integer" />
+	
+	<Entity model="#1" id="#20" name="Balise" subtypeof="#10" />
 	<Attribute entity="#20" id="#23" name="satellitesArray" />
 	<ArrayType attribute="#23" id="#231" size="20" />
 	<NamedType elementTypeOf="#231" id="#2311" name="Satellite" />
@@ -19,11 +21,7 @@
 	<ArrayType elementTypeOf="#241" id="#2411" size="20" />
 	<NamedType elementTypeOf="#2411" id="#24111" name="Satellite" />
 
-	<Entity model="#1" id="#30" name="Satellite" />
-	<Attribute entity="#30" id="#31" name="nom" />
-	<NamedType attribute="#31" id="#311" name="String" />
-	<Attribute entity="#30" id="#32" name="id" />
-	<NamedType attribute="#32" id="#321" name="Integer" />
+	<Entity model="#1" id="#30" name="Satellite" subtypeof="#10" />
 	<Attribute entity="#30" id="#33" name="beaconsList" />
 	<CollectionType attribute="#33" id="#331" type="LIST" max="10" />
 	<NamedType elementTypeOf="#331" id="#3311" name="Balise" />

@@ -52,6 +52,27 @@ public class XMLAnalyser {
 		Entity entity = new Entity();
 		entity.setName(name);
 
+		if (e.getAttribute("subtypeof") != null && !e.getAttribute("subtypeof").isEmpty()) {
+			boolean circularDependency = false;
+			Entity parentEntity = (Entity) minispecElementFromXmlElement(
+					this.xmlElementIndex.get(e.getAttribute("subtypeof")));
+			while (!circularDependency && parentEntity != null) {
+				if (parentEntity.getName().equals(entity.getName())) {
+					circularDependency = true;
+				}
+				parentEntity = (Entity) this.xmlElementIndex.get(parentEntity.getParentClassName());
+			}
+
+			if (circularDependency) {
+				System.err.println("Héritage : dépendance circulaire");
+			}
+
+			Entity entity = (Entity) minispecElementFromXmlElement(this.xmlElementIndex.get(e.getAttribute("entity")));
+
+			String parentClassName = e.getAttribute("subtypeof");
+			entity.setParentClassName(parentClassName);
+		}
+
 		// Ajoute l'entity au model
 		Model model = (Model) minispecElementFromXmlElement(this.xmlElementIndex.get(e.getAttribute("model")));
 		model.addEntity(entity);
