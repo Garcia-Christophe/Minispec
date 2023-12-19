@@ -75,7 +75,7 @@ public class XMLAnalyser {
 			}
 
 			if (circularDependency) {
-				System.err.println("Héritage : dépendance circulaire " + name);
+				throw new RuntimeException("Héritage : dépendance circulaire");
 			} else {
 				String parentClassName = this.xmlElementIndex.get(e.getAttribute("subtypeof")).getAttribute("name");
 				entity.setParentClassName(parentClassName);
@@ -94,9 +94,35 @@ public class XMLAnalyser {
 		String name = e.getAttribute("name");
 		attr.setName(name);
 
-		// Ajoute l'attribut à l'entity
 		Entity entity = (Entity) minispecElementFromXmlElement(this.xmlElementIndex.get(e.getAttribute("entity")));
-		entity.getAttributes().add(attr);
+
+		// Vérification de l'unicité de l'attribut (héritages compris)
+		boolean alreadyTaken = false;
+		List<Attribute> allAttributes = new ArrayList<>();
+		allAttributes.addAll(entity.getAttributes());
+
+		// Rajouter les attributs parents
+		String parentId = this.xmlElementIndex.get(e.getAttribute("entity")).getAttribute("subtypeof");
+		Entity parentEntity;
+		while (!parentId.isEmpty()) {
+			parentEntity = (Entity) this.minispecIndex.get(parentId);
+			allAttributes.addAll(parentEntity.getAttributes());
+			parentId = this.xmlElementIndex.get(parentId).getAttribute("subtypeof");
+		}
+
+		// Vérification de l'unicité
+		for (int i = 0; !alreadyTaken && i < allAttributes.size(); i++) {
+			if (allAttributes.get(i).getName().equals(name)) {
+				alreadyTaken = true;
+			}
+		}
+
+		if (alreadyTaken) {
+			throw new RuntimeException("Attribut : définition multiple de l'attribut \"" + name + "\"");
+		} else {
+			// Ajoute l'attribut à l'entity
+			entity.getAttributes().add(attr);
+		}
 
 		return attr;
 	}

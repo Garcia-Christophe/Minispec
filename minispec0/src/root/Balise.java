@@ -3,7 +3,7 @@ package root;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Balise {
+public class Balise extends MobilElement {
 
 	private Satellite[] satellitesArray;
 

@@ -6,7 +6,7 @@
 	<!-- exemple : le model de l'entite #30 est pointé par son attribut model 
 		avec #1 -->
 	<Model id="#1" />
-	<Entity model="#1" id="#10" name="MobilElement" subtypeof="#20" />
+	<Entity model="#1" id="#10" name="MobilElement" />
 	<Attribute entity="#10" id="#11" name="nom" />
 	<NamedType attribute="#11" id="#111" name="String" />
 	<Attribute entity="#10" id="#12" name="id" />
@@ -31,5 +31,4 @@
 	<Attribute entity="#30" id="#35" name="beaconsBag" />
 	<CollectionType attribute="#35" id="#351" type="BAG" />
 	<NamedType elementTypeOf="#351" id="#3511" name="Balise" />
-
 </Root>
