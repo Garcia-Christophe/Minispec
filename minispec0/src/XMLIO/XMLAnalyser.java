@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -54,23 +56,30 @@ public class XMLAnalyser {
 
 		if (e.getAttribute("subtypeof") != null && !e.getAttribute("subtypeof").isEmpty()) {
 			boolean circularDependency = false;
-			Entity parentEntity = (Entity) minispecElementFromXmlElement(
-					this.xmlElementIndex.get(e.getAttribute("subtypeof")));
-			while (!circularDependency && parentEntity != null) {
-				if (parentEntity.getName().equals(entity.getName())) {
+			boolean forceQuitLoop = false;
+
+			// Vérification de non dépendance circulaire au niveau de l'héritage
+			Element parentElement = this.xmlElementIndex.get(e.getAttribute("subtypeof"));
+			List<String> parentClassNames = new ArrayList<>();
+			while (!circularDependency && !forceQuitLoop && parentElement != null) {
+				String parentClassName = parentElement.getAttribute("name");
+				if (name.equals(parentClassName)) {
+					// Dépendance circulaire
 					circularDependency = true;
+				} else if (parentClassNames.contains(parentClassName)) {
+					// Dépendance circulaire entre autre éléments, mais pas concerné
+					forceQuitLoop = true;
 				}
-				parentEntity = (Entity) this.xmlElementIndex.get(parentEntity.getParentClassName());
+				parentClassNames.add(parentClassName);
+				parentElement = this.xmlElementIndex.get(parentElement.getAttribute("subtypeof"));
 			}
 
 			if (circularDependency) {
-				System.err.println("Héritage : dépendance circulaire");
+				System.err.println("Héritage : dépendance circulaire " + name);
+			} else {
+				String parentClassName = this.xmlElementIndex.get(e.getAttribute("subtypeof")).getAttribute("name");
+				entity.setParentClassName(parentClassName);
 			}
-
-			Entity entity = (Entity) minispecElementFromXmlElement(this.xmlElementIndex.get(e.getAttribute("entity")));
-
-			String parentClassName = e.getAttribute("subtypeof");
-			entity.setParentClassName(parentClassName);
 		}
 
 		// Ajoute l'entity au model

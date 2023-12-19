@@ -6,7 +6,7 @@
 	<!-- exemple : le model de l'entite #30 est pointé par son attribut model 
 		avec #1 -->
 	<Model id="#1" />
-	<Entity model="#1" id="#10" name="MobilElement" />
+	<Entity model="#1" id="#10" name="MobilElement" subtypeof="#20" />
 	<Attribute entity="#10" id="#11" name="nom" />
 	<NamedType attribute="#11" id="#111" name="String" />
 	<Attribute entity="#10" id="#12" name="id" />

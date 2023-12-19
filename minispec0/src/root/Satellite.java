@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
-public class Satellite {
-
-	private String nom;
-
-	private Integer id;
+public class Satellite extends MobilElement {
 
 	private List<Balise> beaconsList;
 
@@ -21,22 +17,6 @@ public class Satellite {
 		this.beaconsList = new ArrayList<>();
 		this.beaconsSet = new HashSet<>();
 		this.beaconsBag = new ArrayList<>();
-	}
-
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public String getNom() {
-		return this.nom;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getId() {
-		return this.id;
 	}
 
 	public boolean isBeaconsListValid() {

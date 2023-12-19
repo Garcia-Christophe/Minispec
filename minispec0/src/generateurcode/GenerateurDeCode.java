@@ -49,9 +49,14 @@ public class GenerateurDeCode extends Visitor {
 
 			String constructor = "\tpublic " + pascalizedName + "() {\n" + constructorContent + "\t}\n\n";
 
+			String extendContent = "";
+			if (e.getParentClassName() != null) {
+				extendContent = " extends " + e.getParentClassName();
+			}
+
 			String classContent = "package root;\n\n";
 			classContent += importsContent + "\n";
-			classContent += "public class " + pascalizedName + " {\n\n";
+			classContent += "public class " + pascalizedName + extendContent + " {\n\n";
 			classContent += attributesContent;
 			classContent += constructor;
 			classContent += methodsContent;
