@@ -5,7 +5,7 @@
 	<!-- Pour associer deux expressions on utilise l'identifiant -->
 	<!-- exemple : le model de l'entite #30 est pointé par son attribut model 
 		avec #1 -->
-	<Model id="#1" name="m2tiil.monpackage" />
+	<Model id="#1" name="m2tILAl.monpackage" />
 	<Entity model="#1" id="#10" name="MobilElement" />
 	<Attribute entity="#10" id="#11" name="nom" />
 	<NamedType attribute="#11" id="#111" name="String" />
@@ -13,6 +13,8 @@
 	<NamedType attribute="#12" id="#121" name="Integer" />
 	
 	<Entity model="#1" id="#20" name="Balise" subtypeof="#10" />
+	<Attribute entity="#20" id="#21" name="pleine" init="false" />
+	<NamedType attribute="#21" id="#211" name="boolean" />
 	<Attribute entity="#20" id="#23" name="satellitesArray" />
 	<ArrayType attribute="#23" id="#231" size="20" />
 	<NamedType elementTypeOf="#231" id="#2311" name="Satellite" />
@@ -31,4 +33,7 @@
 	<Attribute entity="#30" id="#35" name="beaconsBag" />
 	<CollectionType attribute="#35" id="#351" type="BAG" />
 	<NamedType elementTypeOf="#351" id="#3511" name="Balise" />
+	<Attribute entity="#30" id="#36" name="idMaintainers" init="new int[] {2, 5, 6, 8, 10}" />
+	<ArrayType attribute="#36" id="#361" size="5" />
+	<NamedType elementTypeOf="#361" id="#3611" name="int" />
 </Root>

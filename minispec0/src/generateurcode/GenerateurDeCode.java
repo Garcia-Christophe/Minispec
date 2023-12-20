@@ -41,7 +41,7 @@ public class GenerateurDeCode extends Visitor {
 
 	@Override
 	public void visitModel(Model e) {
-		packageName = e.getPackageName().replace(".", "/");
+		packageName = e.getPackageName().replace(".", "/").toLowerCase();
 		packageDir = new File("src/" + packageName);
 		if (!packageDir.exists())
 			packageDir.mkdirs();
@@ -88,17 +88,21 @@ public class GenerateurDeCode extends Visitor {
 
 		// Initialisation
 		if (e.getType() instanceof CollectionType) {
-			constructorContent += "\t\tthis." + e.getName() + " = new " + attributeType + "();\n";
+			if (e.getInitialValue() == null) {
+				constructorContent += "\t\tthis." + e.getName() + " = new " + attributeType + "();\n";
+			}
 
 			// isValid method
 			methodsContent += "\tpublic boolean is" + pascalizedName + "Valid() {\n";
 			methodsContent += "\t\treturn this." + e.getName() + ".size() >= " + ((CollectionType) e.getType()).getMin()
 					+ " && this." + e.getName() + ".size() <= " + ((CollectionType) e.getType()).getMax() + ";\n";
 			methodsContent += "\t}\n\n";
-		} else if (e.getType() instanceof ArrayType) {
+		} else if (e.getType() instanceof ArrayType && e.getInitialValue() == null) {
 			ArrayType arrayType = ((ArrayType) e.getType());
 			constructorContent += "\t\tthis." + e.getName() + " = new "
 					+ attributeType.substring(0, attributeType.length() - 2) + "[" + arrayType.getSize() + "];\n";
+		} else if (e.getInitialValue() != null) {
+			constructorContent += "\t\tthis." + e.getName() + " = " + e.getInitialValue() + ";\n";
 		}
 
 		// Setter

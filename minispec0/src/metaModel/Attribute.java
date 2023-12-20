@@ -4,6 +4,7 @@ public class Attribute implements MinispecElement {
 
 	TypeDesc type;
 	String name;
+	String initialValue;
 
 	public TypeDesc getType() {
 		return type;
@@ -19,6 +20,14 @@ public class Attribute implements MinispecElement {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getInitialValue() {
+		return initialValue;
+	}
+
+	public void setInitialValue(String initialValue) {
+		this.initialValue = initialValue;
 	}
 
 	public void accept(Visitor v) {

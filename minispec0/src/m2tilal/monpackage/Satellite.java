@@ -1,4 +1,4 @@
-package m2tiil.monpackage;
+package m2tilal.monpackage;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,10 +11,13 @@ public class Satellite extends MobilElement {
 
 	private ArrayList<Balise> beaconsBag;
 
+	private int[] idMaintainers;
+
 	public Satellite() {
 		this.beaconsList = new ArrayList<Balise>();
 		this.beaconsSet = new HashSet<Balise>();
 		this.beaconsBag = new ArrayList<Balise>();
+		this.idMaintainers = new int[] { 2, 5, 6, 8, 10 };
 	}
 
 	public boolean isBeaconsListValid() {
@@ -51,6 +54,14 @@ public class Satellite extends MobilElement {
 
 	public ArrayList<Balise> getBeaconsBag() {
 		return this.beaconsBag;
+	}
+
+	public void setIdMaintainers(int[] idMaintainers) {
+		this.idMaintainers = idMaintainers;
+	}
+
+	public int[] getIdMaintainers() {
+		return this.idMaintainers;
 	}
 
 }

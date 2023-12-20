@@ -95,6 +95,12 @@ public class XMLAnalyser {
 		String name = e.getAttribute("name");
 		attr.setName(name);
 
+		// Valeur initiale
+		String initialValue = e.getAttribute("init");
+		if (initialValue != null && !initialValue.isEmpty()) {
+			attr.setInitialValue(initialValue);
+		}
+
 		Entity entity = (Entity) minispecElementFromXmlElement(this.xmlElementIndex.get(e.getAttribute("entity")));
 
 		// Vérification de l'unicité de l'attribut (héritages compris)
