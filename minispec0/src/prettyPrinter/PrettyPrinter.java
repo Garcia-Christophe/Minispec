@@ -15,8 +15,7 @@ public class PrettyPrinter extends Visitor {
 	String attributesContent;
 	String typeContent;
 	String modelContent;
-
-	String packageName;
+	String initValueContent;
 
 	public PrettyPrinter() {
 		initContents();
@@ -27,7 +26,7 @@ public class PrettyPrinter extends Visitor {
 
 	@Override
 	public void visitModel(Model e) {
-		packageDir = new File("src/spec");
+		packageDir = new File("minispec0/src/spec");
 		if (!packageDir.exists())
 			packageDir.mkdir();
 	}
@@ -69,7 +68,11 @@ public class PrettyPrinter extends Visitor {
 	public void visitAttribute(Attribute e) {
 		e.getType().accept(this);
 
-		attributesContent += "\t\t" + e.getName() + ": " +  typeContent + "\n";
+		if (e.getInitialValue() != null) {
+			initValueContent = " := " + e.getInitialValue();
+		}
+
+		attributesContent += "\t\t" + e.getName() + ": " +  typeContent + initValueContent + "\n";
 	}
 
 	@Override
@@ -92,7 +95,7 @@ public class PrettyPrinter extends Visitor {
 	}
 
 	private void initContents() {
-		entitiesContent = attributesContent = typeContent = modelContent = "";
+		entitiesContent = attributesContent = typeContent = modelContent = initValueContent = "";
 	}
 
 	private String pascalize(String str) {
