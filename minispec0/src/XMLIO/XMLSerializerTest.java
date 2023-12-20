@@ -3,6 +3,7 @@ package XMLIO;
 import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,9 +75,11 @@ class XMLSerializerTest {
 	@Test
 	void test3() throws ParserConfigurationException, TransformerException {
 		XMLAnalyser analyser = new XMLAnalyser();
-		Model model = analyser.getModelFromFilenamed("Exemple1.xml");
+		List<Model> models = analyser.getModelsFromFilenamed("Exemple1.xml");
 		XMLSerializer serializer = new XMLSerializer();
-		model.accept(serializer);
+		for (Model model: models){
+			model.accept(serializer);
+		}
 		Document document = serializer.result();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 		Transformer transformer = tFactory.newTransformer();
@@ -89,9 +92,11 @@ class XMLSerializerTest {
 	@Test
 	void test4() throws ParserConfigurationException, TransformerException {
 		XMLAnalyser analyser = new XMLAnalyser();
-		Model model = analyser.getModelFromFilenamed("Exemple2.xml");
+		List<Model> models = analyser.getModelsFromFilenamed("Exemple2.xml");
 		XMLSerializer serializer = new XMLSerializer();
-		model.accept(serializer);
+		for (Model model: models){
+			model.accept(serializer);
+		}
 		Document document = serializer.result();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 		Transformer transformer = tFactory.newTransformer();

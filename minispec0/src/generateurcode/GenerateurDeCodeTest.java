@@ -1,5 +1,6 @@
 package generateurcode;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,12 @@ class GenerateurDeCodeTest {
 		Map<String, Primitive> primitives = analyserImports.getModelFromFilenamed("ExempleImports.xml");
 
 		XMLAnalyser analyser = new XMLAnalyser();
-		Model model = analyser.getModelFromFilenamed("Exemple5.xml");
+		List<Model> models = analyser.getModelsFromFilenamed("Exemple5.xml");
 		GenerateurDeCode generateur = new GenerateurDeCode();
 		generateur.setPrimitives(primitives);
-		model.accept(generateur);
+		for (Model model: models){
+			model.accept(generateur);
+		}
 	}
 
 }

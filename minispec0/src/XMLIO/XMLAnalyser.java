@@ -277,19 +277,28 @@ public class XMLAnalyser {
 		}
 	}
 
-	public Model getModelFromDocument(Document document) {
+	public List<Model> getModelFromDocument(Document document) {
 		Element e = document.getDocumentElement();
 
 		firstRound(e);
 
 		secondRound(e);
 
-		Model model = (Model) this.minispecIndex.get(e.getAttribute("model"));
+		List<Model> models= new ArrayList<>();
 
-		return model;
+		for (int i = 0; i < e.getChildNodes().getLength(); i++) {
+			Node node = e.getChildNodes().item(i);
+			if (node.getNodeName().equals("Model")) {
+				String nodeId = node.getAttributes().getNamedItem("id").getNodeValue();
+				models.add((Model) minispecElementFromXmlElement(this.xmlElementIndex.get(nodeId)));
+			}
+		}
+		System.out.println(models);
+
+		return models;
 	}
 
-	public Model getModelFromInputStream(InputStream stream) {
+	public List<Model> getModelFromInputStream(InputStream stream) {
 		try {
 			// création d'une fabrique de documents
 			DocumentBuilderFactory fabrique = DocumentBuilderFactory.newInstance();
@@ -312,12 +321,12 @@ public class XMLAnalyser {
 		return null;
 	}
 
-	public Model getModelFromString(String contents) {
+	public List<Model> getModelsFromString(String contents) {
 		InputStream stream = new ByteArrayInputStream(contents.getBytes());
 		return getModelFromInputStream(stream);
 	}
 
-	public Model getModelFromFile(File file) {
+	public List<Model> getModelFromFile(File file) {
 		InputStream stream = null;
 		try {
 			stream = new FileInputStream(file);
@@ -328,7 +337,7 @@ public class XMLAnalyser {
 		return getModelFromInputStream(stream);
 	}
 
-	public Model getModelFromFilenamed(String filename) {
+	public List<Model> getModelsFromFilenamed(String filename) {
 		File file = new File(filename);
 		return getModelFromFile(file);
 	}
