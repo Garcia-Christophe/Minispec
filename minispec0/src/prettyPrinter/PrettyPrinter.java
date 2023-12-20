@@ -26,7 +26,7 @@ public class PrettyPrinter extends Visitor {
 
 	@Override
 	public void visitModel(Model e) {
-		packageDir = new File("minispec0/src/spec");
+		packageDir = new File("src/spec");
 		if (!packageDir.exists())
 			packageDir.mkdir();
 	}
