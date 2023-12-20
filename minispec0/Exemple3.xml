@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- start : c'est l'id de l'expression racine -->
-<Root model="#1">
+<Root model="_1">
 	<!-- chaque element a un identifiant unique (attribut id) -->
 	<!-- Pour associer deux expressions on utilise l'identifiant -->
-	<!-- exemple : le model de l'entite #30 est pointé par son attribut model 
-		avec #1 -->
-	<Model id="#1" />
-	<Entity model="#1" id="#20" name="Balise" />
-	<Attribute entity="#20" id="#21" name="nom" />
-	<NamedType attribute="#21" id="#211" name="String" />
-	<Attribute entity="#20" id="#22" name="id" />
-	<NamedType attribute="#22" id="#221" name="Integer" />
+	<!-- exemple : le model de l'entite _30 est pointé par son attribut model 
+		avec _1 -->
+	<Model id="_1" />
+	<Entity model="_1" id="_20" name="Balise" />
+	<Attribute entity="_20" id="_21" name="nom" />
+	<NamedType attribute="_21" id="_211" name="String" />
+	<Attribute entity="_20" id="_22" name="id" />
+	<NamedType attribute="_22" id="_221" name="Integer" />
 	
-	<Entity model="#1" id="#30" name="Satellite" />
-	<Attribute entity="#30" id="#31" name="nom" />
-	<NamedType attribute="#31" id="#311" name="String" />
-	<Attribute entity="#30" id="#32" name="id" />
-	<NamedType attribute="#32" id="#321" name="Integer" />
+	<Entity model="_1" id="_30" name="Satellite" />
+	<Attribute entity="_30" id="_31" name="nom" />
+	<NamedType attribute="_31" id="_311" name="String" />
+	<Attribute entity="_30" id="_32" name="id" />
+	<NamedType attribute="_32" id="_321" name="Integer" />
 	
 </Root>
