@@ -293,7 +293,6 @@ public class XMLAnalyser {
 				models.add((Model) minispecElementFromXmlElement(this.xmlElementIndex.get(nodeId)));
 			}
 		}
-		System.out.println(models);
 
 		return models;
 	}
