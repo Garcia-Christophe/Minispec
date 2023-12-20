@@ -4,7 +4,10 @@
 >
 
 <!ELEMENT Model EMPTY>
-<!ATTLIST Model id ID #REQUIRED>
+<!ATTLIST Model 
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+>
 
 <!ELEMENT Entity EMPTY>
 <!ATTLIST Entity
@@ -19,6 +22,7 @@
 	entity IDREF #REQUIRED
 	id ID #REQUIRED
 	name CDATA #REQUIRED
+	init CDATA #IMPLIED
 >
 
 <!ELEMENT NamedType EMPTY>
