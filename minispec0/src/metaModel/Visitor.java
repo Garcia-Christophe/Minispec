@@ -20,4 +20,7 @@ public class Visitor {
 	public void visitArrayType(ArrayType e) {
 	}
 
+	public void visitPrimitive(Primitive e) {
+	}
+
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- start : c'est l'id de l'expression racine -->
+<JavaCode>
+	<Primitive name="List" type="ArrayList" package="java.util.ArrayList" />
+	<Primitive name="Set" type="HashSet" package="java.util.HashSet" />
+</JavaCode>

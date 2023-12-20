@@ -33,11 +33,9 @@ import metaModel.TypeDesc;
 
 public class XMLAnalyser {
 
-	// Les clés des 2 Map sont les id
-
-	// Map des elements XML
+	// Map des elements XML (clé = id)
 	protected Map<String, Element> xmlElementIndex;
-	// Map des instances de la syntaxe abstraite (metamodel)
+	// Map des instances de la syntaxe abstraite (metamodel) (clé = id)
 	protected Map<String, MinispecElement> minispecIndex;
 
 	public XMLAnalyser() {
@@ -46,7 +44,10 @@ public class XMLAnalyser {
 	}
 
 	protected Model modelFromElement(Element e) {
-		return new Model();
+		Model model = new Model();
+		model.setPackageName(e.getAttribute("name"));
+
+		return model;
 	}
 
 	protected Entity entityFromElement(Element e) {
@@ -325,4 +326,5 @@ public class XMLAnalyser {
 		File file = new File(filename);
 		return getModelFromFile(file);
 	}
+
 }

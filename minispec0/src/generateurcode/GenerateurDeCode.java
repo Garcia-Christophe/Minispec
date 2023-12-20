@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import metaModel.ArrayType;
 import metaModel.Attribute;
@@ -12,6 +14,7 @@ import metaModel.CollectionTypeEnum;
 import metaModel.Entity;
 import metaModel.Model;
 import metaModel.NamedType;
+import metaModel.Primitive;
 import metaModel.Visitor;
 
 public class GenerateurDeCode extends Visitor {
@@ -23,9 +26,13 @@ public class GenerateurDeCode extends Visitor {
 	String methodsContent;
 
 	String attributeType;
+	String packageName;
+
+	Map<String, Primitive> primitives;
 
 	public GenerateurDeCode() {
 		initContents();
+		this.primitives = new HashMap<>();
 	}
 
 	public File result() {
@@ -34,9 +41,10 @@ public class GenerateurDeCode extends Visitor {
 
 	@Override
 	public void visitModel(Model e) {
-		packageDir = new File("src/root");
+		packageName = e.getPackageName().replace(".", "/");
+		packageDir = new File("src/" + packageName);
 		if (!packageDir.exists())
-			packageDir.mkdir();
+			packageDir.mkdirs();
 	}
 
 	@Override
@@ -54,7 +62,7 @@ public class GenerateurDeCode extends Visitor {
 				extendContent = " extends " + e.getParentClassName();
 			}
 
-			String classContent = "package root;\n\n";
+			String classContent = "package " + packageName.replace("/", ".") + ";\n\n";
 			classContent += importsContent + "\n";
 			classContent += "public class " + pascalizedName + extendContent + " {\n\n";
 			classContent += attributesContent;
@@ -80,22 +88,7 @@ public class GenerateurDeCode extends Visitor {
 
 		// Initialisation
 		if (e.getType() instanceof CollectionType) {
-			constructorContent += "\t\tthis." + e.getName() + " = new ";
-			if (attributeType.startsWith(pascalize(CollectionTypeEnum.SET.toString().toLowerCase()))) {
-				// HashSet
-				constructorContent += "HashSet<>();\n";
-				if (!importsContent.contains("import java.util.HashSet")) {
-					// Import
-					importsContent += "import java.util.HashSet;\n";
-				}
-			} else {
-				// ArrayList
-				constructorContent += "ArrayList<>();\n";
-				if (!importsContent.contains("import java.util.ArrayList")) {
-					// Import
-					importsContent += "import java.util.ArrayList;\n";
-				}
-			}
+			constructorContent += "\t\tthis." + e.getName() + " = new " + attributeType + "();\n";
 
 			// isValid method
 			methodsContent += "\tpublic boolean is" + pascalizedName + "Valid() {\n";
@@ -131,22 +124,34 @@ public class GenerateurDeCode extends Visitor {
 		if (e.getCollectionTypeEnum() == CollectionTypeEnum.LIST
 				|| e.getCollectionTypeEnum() == CollectionTypeEnum.BAG) {
 			// List
-			if (!importsContent.contains("import java.util.List")) {
+			String type = "ArrayList"; // Valeur par défaut
+			String importPath = "java.util.ArrayList"; // Valeur par défaut
+			if (this.primitives.get("List") != null) {
+				type = this.primitives.get("List").getType(); // Importé des primitives
+				importPath = this.primitives.get("List").getPackageName(); // Importé des primitives
+			}
+			if (!importsContent.contains("import " + importPath)) {
 				// Import
-				importsContent += "import java.util.List;\n";
+				importsContent += "import " + importPath + ";\n";
 			}
 
 			// Type de l'attribut
-			attributeType = "List<" + attributeType + ">";
+			attributeType = type + "<" + attributeType + ">";
 		} else if (e.getCollectionTypeEnum() == CollectionTypeEnum.SET) {
 			// Set
-			if (!importsContent.contains("import java.util.Set")) {
+			String type = "HashSet"; // Valeur par défaut
+			String importPath = "java.util.HashSet"; // Valeur par défaut
+			if (this.primitives.get("Set") != null) {
+				type = this.primitives.get("Set").getType(); // Importé des primitives
+				importPath = this.primitives.get("Set").getPackageName(); // Importé des primitives
+			}
+			if (!importsContent.contains("import " + importPath)) {
 				// Import
-				importsContent += "import java.util.Set;\n";
+				importsContent += "import " + importPath + ";\n";
 			}
 
 			// Type de l'attribut
-			attributeType = "Set<" + attributeType + ">";
+			attributeType = type + "<" + attributeType + ">";
 		}
 	}
 
@@ -162,6 +167,10 @@ public class GenerateurDeCode extends Visitor {
 
 	private String pascalize(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+
+	public void setPrimitives(Map<String, Primitive> primitives) {
+		this.primitives = primitives;
 	}
 
 }
