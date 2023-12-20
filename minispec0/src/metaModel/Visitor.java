@@ -5,6 +5,9 @@ public class Visitor {
 	public void visitModel(Model e) {
 	}
 
+	public void visitPackage(Model e) {
+	}
+
 	public void visitEntity(Entity e) {
 	}
 

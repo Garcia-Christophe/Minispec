@@ -34,6 +34,8 @@ public class Model implements MinispecElement {
 		for (Entity entity : entities) {
 			entity.accept(v);
 		}
+
+		v.visitPackage(this);
 	}
 
 }

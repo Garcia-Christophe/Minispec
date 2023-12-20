@@ -14,47 +14,62 @@ public class PrettyPrinter extends Visitor {
 	String extendContent;
 	String attributesContent;
 	String typeContent;
+	String modelContent;
 
+	String packageName;
+
+	public PrettyPrinter() {
+		initContents();
+	}
 	public String result() {
 		return result;
 	}
 
 	@Override
 	public void visitModel(Model e) {
-		packageDir = new File("src/spec");
+		packageDir = new File("minispec0/src/spec");
 		if (!packageDir.exists())
 			packageDir.mkdir();
 	}
 
 	@Override
-	public void visitEntity(Entity e) {
-		String pascalizedName = pascalize(e.getName());
+	public void visitPackage(Model e) {
+		String pascalizedName = pascalize(e.getPackageName());
 		File javaFile = new File(packageDir.getPath() + "/" + pascalizedName + ".mSpec");
-
-		if (e.getParentClassName() != null) {
-			extendContent = " subType of (" + pascalize(e.getParentClassName()) + ")";
-		}
-
-		try {
+		try
+		{
 			BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile.getPath(), false));
-			entitiesContent = "";
-			entitiesContent += "entity " + pascalize(e.getName()) + extendContent + ":\n";
-			entitiesContent += attributesContent;
-			entitiesContent += "end_entity;";
-			attributesContent = "";
 
-			writer.write(entitiesContent);
+			modelContent = "model " + pascalizedName + ":";
+			modelContent += entitiesContent;
+			modelContent += "end_model;";
+
+			writer.write(modelContent);
 			writer.close();
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
+		initContents();
+	}
+
+	@Override
+	public void visitEntity(Entity e) {
+		if (e.getParentClassName() != null) {
+			extendContent = " subType of (" + pascalize(e.getParentClassName()) + ")";
+		}
+
+		entitiesContent += "\n";
+		entitiesContent += "\tentity " + pascalize(e.getName()) + extendContent + ":\n";
+		entitiesContent += attributesContent;
+		entitiesContent += "\tend_entity;\n";
+		attributesContent = "";
 	}
 
 	@Override
 	public void visitAttribute(Attribute e) {
 		e.getType().accept(this);
 
-		attributesContent += "\t" + e.getName() + ": " +  typeContent + "\n";
+		attributesContent += "\t\t" + e.getName() + ": " +  typeContent + "\n";
 	}
 
 	@Override
@@ -74,6 +89,10 @@ public class PrettyPrinter extends Visitor {
 		e.getElementType().accept(this);
 
 		typeContent = "Array[" + e.getSize() + "] of " + typeContent;
+	}
+
+	private void initContents() {
+		entitiesContent = attributesContent = typeContent = modelContent = "";
 	}
 
 	private String pascalize(String str) {
