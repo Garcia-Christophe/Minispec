@@ -1,17 +1,16 @@
-package root;
+package m2tiil.monpackage;
 
-import java.util.List;
 import java.util.ArrayList;
 
 public class Balise extends MobilElement {
 
 	private Satellite[] satellitesArray;
 
-	private List<Satellite[]> satellitesArrayList;
+	private ArrayList<Satellite[]> satellitesArrayList;
 
 	public Balise() {
 		this.satellitesArray = new Satellite[20];
-		this.satellitesArrayList = new ArrayList<>();
+		this.satellitesArrayList = new ArrayList<Satellite[]>();
 	}
 
 	public void setSatellitesArray(Satellite[] satellitesArray) {
@@ -26,11 +25,11 @@ public class Balise extends MobilElement {
 		return this.satellitesArrayList.size() >= 0 && this.satellitesArrayList.size() <= 2147483647;
 	}
 
-	public void setSatellitesArrayList(List<Satellite[]> satellitesArrayList) {
+	public void setSatellitesArrayList(ArrayList<Satellite[]> satellitesArrayList) {
 		this.satellitesArrayList = satellitesArrayList;
 	}
 
-	public List<Satellite[]> getSatellitesArrayList() {
+	public ArrayList<Satellite[]> getSatellitesArrayList() {
 		return this.satellitesArrayList;
 	}
 
