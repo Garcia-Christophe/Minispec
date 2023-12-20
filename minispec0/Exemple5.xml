@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- start : c'est l'id de l'expression racine -->
-<Root model="#1">
+<Root model="_1">
 	<!-- chaque element a un identifiant unique (attribut id) -->
 	<!-- Pour associer deux expressions on utilise l'identifiant -->
-	<!-- exemple : le model de l'entite #30 est pointé par son attribut model 
-		avec #1 -->
-	<Model id="#1" name="m2tiil.monpackage" />
-	<Entity model="#1" id="#10" name="MobilElement" />
-	<Attribute entity="#10" id="#11" name="nom" />
-	<NamedType attribute="#11" id="#111" name="String" />
-	<Attribute entity="#10" id="#12" name="id" />
-	<NamedType attribute="#12" id="#121" name="Integer" />
+	<!-- exemple : le model de l'entite _30 est pointé par son attribut model 
+		avec _1 -->
+	<Model id="_1" name="m2tiil.monpackage" />
+	<Entity model="_1" id="_10" name="MobilElement" />
+	<Attribute entity="_10" id="_11" name="nom" />
+	<NamedType attribute="_11" id="_111" name="String" />
+	<Attribute entity="_10" id="_12" name="id" />
+	<NamedType attribute="_12" id="_121" name="Integer" />
 	
-	<Entity model="#1" id="#20" name="Balise" subtypeof="#10" />
-	<Attribute entity="#20" id="#23" name="satellitesArray" />
-	<ArrayType attribute="#23" id="#231" size="20" />
-	<NamedType elementTypeOf="#231" id="#2311" name="Satellite" />
-	<Attribute entity="#20" id="#24" name="satellitesArrayList" />
-	<CollectionType attribute="#24" id="#241" type="LIST" />
-	<ArrayType elementTypeOf="#241" id="#2411" size="20" />
-	<NamedType elementTypeOf="#2411" id="#24111" name="Satellite" />
+	<Entity model="_1" id="_20" name="Balise" subtypeof="_10" />
+	<Attribute entity="_20" id="_23" name="satellitesArray" />
+	<ArrayType attribute="_23" id="_231" size="20" />
+	<NamedType elementTypeOf="_231" id="_2311" name="Satellite" />
+	<Attribute entity="_20" id="_24" name="satellitesArrayList" />
+	<CollectionType attribute="_24" id="_241" type="LIST" />
+	<ArrayType elementTypeOf="_241" id="_2411" size="20" />
+	<NamedType elementTypeOf="_2411" id="_24111" name="Satellite" />
 
-	<Entity model="#1" id="#30" name="Satellite" subtypeof="#10" />
-	<Attribute entity="#30" id="#33" name="beaconsList" />
-	<CollectionType attribute="#33" id="#331" type="LIST" max="10" />
-	<NamedType elementTypeOf="#331" id="#3311" name="Balise" />
-	<Attribute entity="#30" id="#34" name="beaconsSet" />
-	<CollectionType attribute="#34" id="#341" type="SET" min="2" max="10" />
-	<NamedType elementTypeOf="#341" id="#3411" name="Balise" />
-	<Attribute entity="#30" id="#35" name="beaconsBag" />
-	<CollectionType attribute="#35" id="#351" type="BAG" />
-	<NamedType elementTypeOf="#351" id="#3511" name="Balise" />
+	<Entity model="_1" id="_30" name="Satellite" subtypeof="_10" />
+	<Attribute entity="_30" id="_33" name="beaconsList" />
+	<CollectionType attribute="_33" id="_331" type="LIST" max="10" />
+	<NamedType elementTypeOf="_331" id="_3311" name="Balise" />
+	<Attribute entity="_30" id="_34" name="beaconsSet" />
+	<CollectionType attribute="_34" id="_341" type="SET" min="2" max="10" />
+	<NamedType elementTypeOf="_341" id="_3411" name="Balise" />
+	<Attribute entity="_30" id="_35" name="beaconsBag" />
+	<CollectionType attribute="_35" id="_351" type="BAG" />
+	<NamedType elementTypeOf="_351" id="_3511" name="Balise" />
 </Root>

@@ -1,0 +1,8 @@
+<!ELEMENT JavaCode (Primitive)*>
+
+<!ELEMENT Primitive EMPTY>
+<!ATTLIST Primitive 
+	name CDATA #REQUIRED
+	type CDATA #REQUIRED
+	package CDATA #REQUIRED
+>
