@@ -1,9 +1,8 @@
 package generateurcode;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,11 +27,15 @@ public class GenerateurDeCode extends Visitor {
 	String attributeType;
 	String packageName;
 
+	String repositoryWriterContent;
+	String repositoryReaderContent;
+
 	Map<String, Primitive> primitives;
 
 	public GenerateurDeCode() {
 		initContents();
 		this.primitives = new HashMap<>();
+		this.repositoryWriterContent = this.repositoryReaderContent = "";
 	}
 
 	public File result() {
@@ -73,6 +76,29 @@ public class GenerateurDeCode extends Visitor {
 
 			writer.write(classContent);
 			writer.close();
+
+			//nouvelle entity ajoutée & writer et au reader du repository
+			repositoryWriterContent += "\t\t\t\tif (obj instanceof " + e.getName() + ") {\n" +
+					"\t\t\t\t\t" + e.getName() + " newInstance = (" + e.getName() + ") obj;\n" +
+					"\t\t\t\t\tinstanceString += \"\\t<" + e.getName();
+
+			repositoryReaderContent += "\t\t\t\t\tif (elem.getTagName().equals(\"" + e.getName() + "\")) {\n" +
+					"\t\t\t\t\t\t" + e.getName() + " newInstance = new " + e.getName() + "();\n";
+
+			for (Attribute attr: e.getAttributes()) {
+				if (attr.getType() instanceof NamedType) {
+					attr.getType().accept(this);
+					//ajout des attributs de l'entity au writer et au reader de repository
+					repositoryWriterContent += " " + attr.getName() + "=\\\"\" + newInstance.get" + pascalize(attr.getName()) + "() + \"\\\"";
+
+					repositoryReaderContent += "\t\t\t\t\t\tnewInstance.set" + pascalize(attr.getName()) + "(" + pascalize(attributeType) + ".valueOf(elem.getAttribute(\"" + attr.getName() + "\")));\n";
+				}
+			}
+			//fin de l'entity au writer et au reader de repository
+			repositoryWriterContent += "/>\\n\";\n\t\t\t\t}\n";
+
+			repositoryReaderContent += "\t\t\t\t\t\tthis.addInstances(newInstance);\n" +
+					"\t\t\t\t\t}\n";
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -166,6 +192,23 @@ public class GenerateurDeCode extends Visitor {
 		attributeType = attributeType + "[]";
 	}
 
+	@Override
+	public void visitPackage(Model e) {
+		try {
+			String fileContent = Files.readString(Path.of(packageDir.getPath() + "/Repository.java"));
+
+			fileContent = fileContent.replace("//writers", repositoryWriterContent);
+
+			fileContent = fileContent.replace("//readers", repositoryReaderContent);
+
+			BufferedWriter bw = new BufferedWriter(new FileWriter(packageDir.getPath() + "/Repository.java"));
+			bw.write(fileContent);
+			bw.close();
+		} catch (Exception exception) {
+			System.err.println(exception);
+		}
+	}
+
 	private void initContents() {
 		importsContent = attributesContent = constructorContent = methodsContent = "";
 	}
@@ -215,21 +258,7 @@ public class GenerateurDeCode extends Visitor {
 					"                Node node = nodeList.item(i);\n" +
 					"                if (node instanceof Element) {\n" +
 					"                    Element elem = (Element) node;\n" +
-					"                    if (elem.getTagName().equals(\"Satellite\")) {\n" +
-					"                        Satellite sat = new Satellite();\n" +
-					"                        sat.setId(Integer.parseInt(elem.getAttribute(\"id\")));\n" +
-					"                        sat.setNom(elem.getAttribute(\"nom\"));\n" +
-					"\n" +
-					"                        this.addInstances(sat);\n" +
-					"                    }\n" +
-					"                    if (elem.getTagName().equals(\"Balise\")) {\n" +
-					"                        Balise balise = new Balise();\n" +
-					"                        balise.setId(Integer.parseInt(elem.getAttribute(\"id\")));\n" +
-					"                        balise.setNom(elem.getAttribute(\"nom\"));\n" +
-					"                        balise.setPleine(Boolean.parseBoolean(elem.getAttribute(\"pleine\")));\n" +
-					"\n" +
-					"                        this.addInstances(balise);\n" +
-					"                    }\n" +
+					"//readers\n" +
 					"                }\n" +
 					"            }\n" +
 					"        } catch (Exception e) {\n" +
@@ -242,13 +271,7 @@ public class GenerateurDeCode extends Visitor {
 					"            BufferedWriter bw = new BufferedWriter(new FileWriter(f.getPath(), false));\n" +
 					"            String instanceString = \"<Instance>\\n\";\n" +
 					"            for (Object obj : instances) {\n" +
-					"                if (obj instanceof Satellite) {\n" +
-					"                    Satellite sat = (Satellite) obj;\n" +
-					"                    instanceString += \"\\t<Satellite id=\\\"\" + sat.getId() + \"\\\" nom=\\\"\" + sat.getNom() + \"\\\"/>\\n\";\n" +
-					"                } else if (obj instanceof Balise) {\n" +
-					"                    Balise balise = (Balise) obj;\n" +
-					"                    instanceString += \"\\t<Balise id=\\\"\" + balise.getId() + \"\\\" nom=\\\"\" + balise.getNom() + \"\\\" pleine=\\\"\" + balise.getPleine() + \"\\\"/>\\n\";\n" +
-					"                }\n" +
+					"//writers\n" +
 					"            }\n" +
 					"            instanceString += \"</Instance>\";\n" +
 					"            bw.write(instanceString);\n" +
