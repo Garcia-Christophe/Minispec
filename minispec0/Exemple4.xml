@@ -5,7 +5,7 @@
 	<!-- Pour associer deux expressions on utilise l'identifiant -->
 	<!-- exemple : le model de l'entite _30 est pointé par son attribut model 
 		avec _1 -->
-	<Model id="_1" />
+	<Model id="_1" name="m2tILAl.monpackage" />
 	<Entity model="_1" id="_20" name="Balise" />
 	<Attribute entity="_20" id="_21" name="nom" />
 	<NamedType attribute="_21" id="_211" name="String" />
