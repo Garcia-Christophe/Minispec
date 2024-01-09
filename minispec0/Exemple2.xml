@@ -4,7 +4,7 @@
 	<!-- chaque element a un identifiant unique (attribut id) -->
 	<!-- Pour associer deux expressions on utilise l'identifiant -->
 	<!-- 	exemple : le model de l'entite _30 est pointé par son attribut model avec _1  -->
-	<Model id="_1" />
+	<Model id="_1" name="m2tILAl.monpackage"/>
 	<Entity model="_1" id="_20" name="Balise"/>
 	<Entity model="_1" id="_30" name="Satellite"/>
 </Root>
