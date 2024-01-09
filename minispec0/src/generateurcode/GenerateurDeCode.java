@@ -45,6 +45,7 @@ public class GenerateurDeCode extends Visitor {
 		packageDir = new File("src/" + packageName);
 		if (!packageDir.exists())
 			packageDir.mkdirs();
+		generateRepository();
 	}
 
 	@Override
@@ -175,6 +176,101 @@ public class GenerateurDeCode extends Visitor {
 
 	public void setPrimitives(Map<String, Primitive> primitives) {
 		this.primitives = primitives;
+	}
+
+	public void generateRepository() {
+		try {
+			BufferedWriter br = new BufferedWriter(new FileWriter(packageDir.getPath() + "/Repository.java"));
+			String fileContent = "package " + this.packageName.replace("/", ".") + ";\n" +
+					"\n" +
+					"import org.w3c.dom.Document;\n" +
+					"import org.w3c.dom.Element;\n" +
+					"import org.w3c.dom.Node;\n" +
+					"import org.w3c.dom.NodeList;\n" +
+					"\n" +
+					"import javax.xml.parsers.DocumentBuilder;\n" +
+					"import javax.xml.parsers.DocumentBuilderFactory;\n" +
+					"import java.io.*;\n" +
+					"import java.util.ArrayList;\n" +
+					"import java.util.List;\n" +
+					"\n" +
+					"public class Repository {\n" +
+					"    List<Object> instances;\n" +
+					"\n" +
+					"    public Repository() {\n" +
+					"        instances = new ArrayList<>();\n" +
+					"    }\n" +
+					"\n" +
+					"    public void readFile(File f) {\n" +
+					"        try {\n" +
+					"            // création d'une fabrique de documents\n" +
+					"            DocumentBuilderFactory fabrique = DocumentBuilderFactory.newInstance();\n" +
+					"\n" +
+					"            // création d'un constructeur de documents\n" +
+					"            DocumentBuilder constructeur = fabrique.newDocumentBuilder();\n" +
+					"            Document document = constructeur.parse(new FileInputStream(f));\n" +
+					"            Element firstElement = document.getDocumentElement();\n" +
+					"            NodeList nodeList = firstElement.getChildNodes();\n" +
+					"            for (int i = 0; i < nodeList.getLength(); i++) {\n" +
+					"                Node node = nodeList.item(i);\n" +
+					"                if (node instanceof Element) {\n" +
+					"                    Element elem = (Element) node;\n" +
+					"                    if (elem.getTagName().equals(\"Satellite\")) {\n" +
+					"                        Satellite sat = new Satellite();\n" +
+					"                        sat.setId(Integer.parseInt(elem.getAttribute(\"id\")));\n" +
+					"                        sat.setNom(elem.getAttribute(\"nom\"));\n" +
+					"\n" +
+					"                        this.addInstances(sat);\n" +
+					"                    }\n" +
+					"                    if (elem.getTagName().equals(\"Balise\")) {\n" +
+					"                        Balise balise = new Balise();\n" +
+					"                        balise.setId(Integer.parseInt(elem.getAttribute(\"id\")));\n" +
+					"                        balise.setNom(elem.getAttribute(\"nom\"));\n" +
+					"                        balise.setPleine(Boolean.parseBoolean(elem.getAttribute(\"pleine\")));\n" +
+					"\n" +
+					"                        this.addInstances(balise);\n" +
+					"                    }\n" +
+					"                }\n" +
+					"            }\n" +
+					"        } catch (Exception e) {\n" +
+					"            System.err.println(e);\n" +
+					"        }\n" +
+					"    }\n" +
+					"\n" +
+					"    public void writeFile(File f) {\n" +
+					"        try {\n" +
+					"            BufferedWriter bw = new BufferedWriter(new FileWriter(f.getPath(), false));\n" +
+					"            String instanceString = \"<Instance>\\n\";\n" +
+					"            for (Object obj : instances) {\n" +
+					"                if (obj instanceof Satellite) {\n" +
+					"                    Satellite sat = (Satellite) obj;\n" +
+					"                    instanceString += \"\\t<Satellite id=\\\"\" + sat.getId() + \"\\\" nom=\\\"\" + sat.getNom() + \"\\\"/>\\n\";\n" +
+					"                } else if (obj instanceof Balise) {\n" +
+					"                    Balise balise = (Balise) obj;\n" +
+					"                    instanceString += \"\\t<Balise id=\\\"\" + balise.getId() + \"\\\" nom=\\\"\" + balise.getNom() + \"\\\" pleine=\\\"\" + balise.getPleine() + \"\\\"/>\\n\";\n" +
+					"                }\n" +
+					"            }\n" +
+					"            instanceString += \"</Instance>\";\n" +
+					"            bw.write(instanceString);\n" +
+					"            bw.close();\n" +
+					"        } catch (Exception e) {\n" +
+					"            System.err.println(e);\n" +
+					"        }\n" +
+					"    }\n" +
+					"\n" +
+					"    public void addInstances(Object instance) {\n" +
+					"        this.instances.add(instance);\n" +
+					"    }\n" +
+					"\n" +
+					"    public List<Object> getInstances() {\n" +
+					"        return this.instances;\n" +
+					"    }\n" +
+					"}\n";
+			br.write(fileContent);
+			br.close();
+		} catch(Exception e) {
+			System.err.println(e);
+		}
 	}
 
 }

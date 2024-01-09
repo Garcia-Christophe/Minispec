@@ -36,6 +36,7 @@ public class Model implements MinispecElement {
 		}
 
 		v.visitPackage(this);
+
 	}
 
 }
