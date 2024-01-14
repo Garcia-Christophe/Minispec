@@ -8,6 +8,7 @@ public class Entity implements MinispecElement {
 	private String name;
 	private List<Attribute> attributes;
 	private String parentClassName;
+	private String parentInterfaceName;
 
 	public Entity() {
 		this.attributes = new ArrayList<>();
@@ -35,6 +36,14 @@ public class Entity implements MinispecElement {
 
 	public void setParentClassName(String parentClassName) {
 		this.parentClassName = parentClassName;
+	}
+
+	public String getParentInterfaceName() {
+		return parentInterfaceName;
+	}
+
+	public void setParentInterfaceName(String parentInterfaceName) {
+		this.parentInterfaceName = parentInterfaceName;
 	}
 
 	public void accept(Visitor v) {

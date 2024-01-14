@@ -7,9 +7,11 @@ public class Model implements MinispecElement {
 
 	private String packageName;
 	List<Entity> entities;
+	List<Interface> interfaces;
 
 	public Model() {
 		this.entities = new ArrayList<>();
+		this.interfaces = new ArrayList<>();
 	}
 
 	public void addEntity(Entity e) {
@@ -18,6 +20,14 @@ public class Model implements MinispecElement {
 
 	public List<Entity> getEntities() {
 		return entities;
+	}
+
+	public void addInterface(Interface e) {
+		this.interfaces.add(e);
+	}
+
+	public List<Interface> getInterfaces() {
+		return interfaces;
 	}
 
 	public String getPackageName() {
@@ -30,6 +40,10 @@ public class Model implements MinispecElement {
 
 	public void accept(Visitor v) {
 		v.visitModel(this);
+
+		for (Interface inter : interfaces) {
+			inter.accept(v);
+		}
 
 		for (Entity entity : entities) {
 			entity.accept(v);

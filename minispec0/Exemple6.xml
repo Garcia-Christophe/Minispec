@@ -4,21 +4,24 @@
 	<Model id="_1" name="m2tiila.metaModeleGENERE" />
 	
 	<!-- Minispec -->
-	<Entity model="_1" id="_20" name="MiniSpec"/>
+	<Interface model="_1" id="_20" name="MiniSpec"/>
 	
 	<!-- TypeDesc -->
-	<Entity model="_1" id="_50" name="TypeDesc" subtypeof="_20"/>
+	<Entity model="_1" id="_50" name="TypeDesc" implements="_20"/>
 	
 	<!-- Model -->
-	<Entity model="_1" id="_10" name="Model" subtypeof="_20"/>
+	<Entity model="_1" id="_10" name="Model" implements="_20"/>
 	<Attribute entity="_10" id="_11" name="packageName" />
 	<NamedType attribute="_11" id="_111" name="String" />
 	<Attribute entity="_10" id="_12" name="entities" />
 	<CollectionType attribute="_12" id="_121" type="LIST" />
 	<NamedType elementTypeOf="_121" id="_1211" name="Entity" />
+	<Attribute entity="_10" id="_13" name="interfaces" />
+	<CollectionType attribute="_13" id="_131" type="LIST" />
+	<NamedType elementTypeOf="_131" id="_1311" name="Interface" />
 	
 	<!-- Entity -->
-	<Entity model="_1" id="_30" name="Entity" subtypeof="_20"/>
+	<Entity model="_1" id="_30" name="Entity" implements="_20"/>
 	<Attribute entity="_30" id="_31" name="name" />
 	<NamedType attribute="_31" id="_311" name="String" />
 	<Attribute entity="_30" id="_32" name="attributes" />
@@ -26,9 +29,16 @@
 	<NamedType elementTypeOf="_321" id="_3211" name="Attribute" />
 	<Attribute entity="_30" id="_33" name="parentClassName" />
 	<NamedType attribute="_33" id="_331" name="String" />
+	<Attribute entity="_30" id="_34" name="parentInterfaceName" />
+	<NamedType attribute="_34" id="_341" name="String" />
+	
+	<!-- Interface -->
+	<Entity model="_1" id="_300" name="Interface" implements="_20"/>
+	<Attribute entity="_300" id="_301" name="name" />
+	<NamedType attribute="_301" id="_3011" name="String" />
 	
 	<!-- Attribute -->
-	<Entity model="_1" id="_40" name="Attribute" subtypeof="_20"/>
+	<Entity model="_1" id="_40" name="Attribute" implements="_20"/>
 	<Attribute entity="_40" id="_41" name="type" />
 	<NamedType attribute="_41" id="_411" name="TypeDesc" />
 	<Attribute entity="_40" id="_42" name="name" />
@@ -63,7 +73,7 @@
 	<NamedType attribute="_94" id="_941" name="CollectionTypeEnum" />
 	
 	<!-- Attribute -->
-	<Entity model="_1" id="_100" name="Primitive" subtypeof="_20"/>
+	<Entity model="_1" id="_100" name="Primitive" implements="_20"/>
 	<Attribute entity="_100" id="_101" name="name" />
 	<NamedType attribute="_101" id="_1011" name="String" />
 	<Attribute entity="_100" id="_102" name="type" />

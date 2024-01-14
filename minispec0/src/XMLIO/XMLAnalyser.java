@@ -26,6 +26,7 @@ import metaModel.Attribute;
 import metaModel.CollectionType;
 import metaModel.CollectionTypeEnum;
 import metaModel.Entity;
+import metaModel.Interface;
 import metaModel.MinispecElement;
 import metaModel.Model;
 import metaModel.NamedType;
@@ -56,30 +57,21 @@ public class XMLAnalyser {
 		entity.setName(name);
 
 		if (e.getAttribute("subtypeof") != null && !e.getAttribute("subtypeof").isEmpty()) {
-			boolean circularDependency = false;
-			boolean forceQuitLoop = false;
-
-			// Vérification de non dépendance circulaire au niveau de l'héritage
-			Element parentElement = this.xmlElementIndex.get(e.getAttribute("subtypeof"));
-			List<String> parentClassNames = new ArrayList<>();
-			while (!circularDependency && !forceQuitLoop && parentElement != null) {
-				String parentClassName = parentElement.getAttribute("name");
-				if (name.equals(parentClassName)) {
-					// Dépendance circulaire
-					circularDependency = true;
-				} else if (parentClassNames.contains(parentClassName)) {
-					// Dépendance circulaire entre autre éléments, mais pas concerné
-					forceQuitLoop = true;
-				}
-				parentClassNames.add(parentClassName);
-				parentElement = this.xmlElementIndex.get(parentElement.getAttribute("subtypeof"));
-			}
-
-			if (circularDependency) {
-				throw new RuntimeException("Héritage : dépendance circulaire");
+			// équivalent "extends"
+			if (circularDependency(e, name, "subtypeof")) {
+				throw new RuntimeException("Héritage : dépendance circulaire de classe");
 			} else {
 				String parentClassName = this.xmlElementIndex.get(e.getAttribute("subtypeof")).getAttribute("name");
 				entity.setParentClassName(parentClassName);
+			}
+		} else if (e.getAttribute("implements") != null && !e.getAttribute("implements").isEmpty()) {
+			// équivalent "implements"
+			if (circularDependency(e, name, "implements")) {
+				throw new RuntimeException("Héritage : dépendance circulaire d'interface");
+			} else {
+				String parentInterfaceName = this.xmlElementIndex.get(e.getAttribute("implements"))
+						.getAttribute("name");
+				entity.setParentInterfaceName(parentInterfaceName);
 			}
 		}
 
@@ -88,6 +80,29 @@ public class XMLAnalyser {
 		model.addEntity(entity);
 
 		return entity;
+	}
+
+	private boolean circularDependency(Element e, String name, String attr) {
+		boolean circularDependency = false;
+		boolean forceQuitLoop = false;
+
+		// Vérification de non dépendance circulaire au niveau de l'héritage
+		Element parentElement = this.xmlElementIndex.get(e.getAttribute(attr));
+		List<String> parentClassNames = new ArrayList<>();
+		while (!circularDependency && !forceQuitLoop && parentElement != null) {
+			String parentClassName = parentElement.getAttribute("name");
+			if (name.equals(parentClassName)) {
+				// Dépendance circulaire
+				circularDependency = true;
+			} else if (parentClassNames.contains(parentClassName)) {
+				// Dépendance circulaire entre autre éléments, mais pas concerné
+				forceQuitLoop = true;
+			}
+			parentClassNames.add(parentClassName);
+			parentElement = this.xmlElementIndex.get(parentElement.getAttribute(attr));
+		}
+
+		return circularDependency;
 	}
 
 	protected Attribute attributeFromElement(Element e) {
@@ -228,6 +243,18 @@ public class XMLAnalyser {
 		return arrayType;
 	}
 
+	protected Interface interfaceFromElement(Element e) {
+		String name = e.getAttribute("name");
+		Interface inter = new Interface();
+		inter.setName(name);
+
+		// Ajoute l'interface au model
+		Model model = (Model) minispecElementFromXmlElement(this.xmlElementIndex.get(e.getAttribute("model")));
+		model.addInterface(inter);
+
+		return inter;
+	}
+
 	protected MinispecElement minispecElementFromXmlElement(Element e) {
 		String id = e.getAttribute("id");
 		MinispecElement result = this.minispecIndex.get(id);
@@ -247,6 +274,8 @@ public class XMLAnalyser {
 			result = collectionTypeFromElement(e);
 		} else if (tag.equals("ArrayType")) {
 			result = arrayTypeFromElement(e);
+		} else if (tag.equals("Interface")) {
+			result = interfaceFromElement(e);
 		}
 		this.minispecIndex.put(id, result);
 
@@ -284,7 +313,7 @@ public class XMLAnalyser {
 
 		secondRound(e);
 
-		List<Model> models= new ArrayList<>();
+		List<Model> models = new ArrayList<>();
 
 		for (int i = 0; i < e.getChildNodes().getLength(); i++) {
 			Node node = e.getChildNodes().item(i);

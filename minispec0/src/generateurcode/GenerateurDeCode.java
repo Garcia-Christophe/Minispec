@@ -14,6 +14,7 @@ import metaModel.Attribute;
 import metaModel.CollectionType;
 import metaModel.CollectionTypeEnum;
 import metaModel.Entity;
+import metaModel.Interface;
 import metaModel.Model;
 import metaModel.NamedType;
 import metaModel.Primitive;
@@ -64,9 +65,14 @@ public class GenerateurDeCode extends Visitor {
 
 			String constructor = "\tpublic " + pascalizedName + "() {\n" + constructorContent + "\t}\n\n";
 
-			String extendContent = "";
+			String extendsContent = "";
 			if (e.getParentClassName() != null) {
-				extendContent = " extends " + e.getParentClassName();
+				extendsContent = "extends " + e.getParentClassName() + " ";
+			}
+
+			String implementsContent = "";
+			if (e.getParentInterfaceName() != null) {
+				implementsContent = "implements " + e.getParentInterfaceName() + " ";
 			}
 
 			// isValid method
@@ -80,7 +86,7 @@ public class GenerateurDeCode extends Visitor {
 
 			String classContent = "package " + packageName.replace("/", ".") + ";\n\n";
 			classContent += importsContent + "\n";
-			classContent += "public class " + pascalizedName + extendContent + " {\n\n";
+			classContent += "public class " + pascalizedName + " " + extendsContent + implementsContent + "{\n\n";
 			classContent += attributesContent;
 			classContent += constructor;
 			classContent += methodsContent;
@@ -271,6 +277,25 @@ public class GenerateurDeCode extends Visitor {
 			br.close();
 		} catch (Exception e) {
 			System.err.println(e);
+		}
+	}
+
+	@Override
+	public void visitInterface(Interface e) {
+		String pascalizedName = pascalize(e.getName());
+		File javaFile = new File(packageDir.getPath() + "/" + pascalizedName + ".java");
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile.getPath(), false));
+
+			String classContent = "package " + packageName.replace("/", ".") + ";\n\n";
+			classContent += "public interface " + pascalizedName + "{\n\n";
+			classContent += "}\n";
+
+			writer.write(classContent);
+			writer.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 	}
 

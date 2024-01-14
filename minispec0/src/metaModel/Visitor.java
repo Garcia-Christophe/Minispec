@@ -26,4 +26,7 @@ public class Visitor {
 	public void visitPrimitive(Primitive e) {
 	}
 
+	public void visitInterface(Interface e) {
+	}
+
 }
