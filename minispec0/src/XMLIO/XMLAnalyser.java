@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import metaModel.Attribute;
 import metaModel.CollectionType;
 import metaModel.CollectionTypeEnum;
 import metaModel.Entity;
+import metaModel.Enumeration;
 import metaModel.Interface;
 import metaModel.MinispecElement;
 import metaModel.Model;
@@ -255,6 +257,21 @@ public class XMLAnalyser {
 		return inter;
 	}
 
+	protected Enumeration enumerationFromElement(Element e) {
+		String name = e.getAttribute("name");
+		Enumeration enumeration = new Enumeration();
+		enumeration.setName(name);
+		String items = e.getAttribute("items");
+		String[] tabItems = items.split(",");
+		enumeration.setItems(Arrays.asList(tabItems));
+
+		// Ajoute l'interface au model
+		Model model = (Model) minispecElementFromXmlElement(this.xmlElementIndex.get(e.getAttribute("model")));
+		model.addEnumeration(enumeration);
+
+		return enumeration;
+	}
+
 	protected MinispecElement minispecElementFromXmlElement(Element e) {
 		String id = e.getAttribute("id");
 		MinispecElement result = this.minispecIndex.get(id);
@@ -276,6 +293,8 @@ public class XMLAnalyser {
 			result = arrayTypeFromElement(e);
 		} else if (tag.equals("Interface")) {
 			result = interfaceFromElement(e);
+		} else if (tag.equals("Enumeration")) {
+			result = enumerationFromElement(e);
 		}
 		this.minispecIndex.put(id, result);
 

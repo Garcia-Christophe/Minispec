@@ -8,10 +8,12 @@ public class Model implements MinispecElement {
 	private String packageName;
 	List<Entity> entities;
 	List<Interface> interfaces;
+	List<Enumeration> enumerations;
 
 	public Model() {
 		this.entities = new ArrayList<>();
 		this.interfaces = new ArrayList<>();
+		this.enumerations = new ArrayList<>();
 	}
 
 	public void addEntity(Entity e) {
@@ -30,6 +32,14 @@ public class Model implements MinispecElement {
 		return interfaces;
 	}
 
+	public void addEnumeration(Enumeration enumeration) {
+		this.enumerations.add(enumeration);
+	}
+
+	public List<Enumeration> getEnumeration() {
+		return enumerations;
+	}
+
 	public String getPackageName() {
 		return packageName;
 	}
@@ -45,6 +55,10 @@ public class Model implements MinispecElement {
 			inter.accept(v);
 		}
 
+		for (Enumeration enumeration : enumerations) {
+			enumeration.accept(v);
+		}
+
 		for (Entity entity : entities) {
 			entity.accept(v);
 		}
@@ -52,5 +66,4 @@ public class Model implements MinispecElement {
 		v.visitPackage(this);
 
 	}
-
 }

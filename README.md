@@ -27,6 +27,7 @@ Minispec est un langage de modélisation pour générer du code.
 - 7. Rebouclage :
   - XML du méta-modèle
   - Concept d'interface (basique)
+  - Concept d'énumération
 
 ## Les améliorations à faire
 
@@ -35,7 +36,7 @@ Minispec est un langage de modélisation pour générer du code.
 - 6. Lot d'instances :
   - permettre la sérialisation des collections/tableaux
 - 7. Rebouclage :
-  - ajout des enumérations, méthodes accept
+  - ajout du pattern visiteur
   - utilisation du méta-modèle créé
 
 ## Autres informations

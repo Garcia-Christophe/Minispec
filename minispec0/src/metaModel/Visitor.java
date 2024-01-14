@@ -29,4 +29,6 @@ public class Visitor {
 	public void visitInterface(Interface e) {
 	}
 
+	public void visitEnumeration(Enumeration e) {
+	}
 }

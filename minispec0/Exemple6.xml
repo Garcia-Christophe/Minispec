@@ -19,6 +19,9 @@
 	<Attribute entity="_10" id="_13" name="interfaces" />
 	<CollectionType attribute="_13" id="_131" type="LIST" />
 	<NamedType elementTypeOf="_131" id="_1311" name="Interface" />
+	<Attribute entity="_10" id="_14" name="enumerations" />
+	<CollectionType attribute="_14" id="_141" type="LIST" />
+	<NamedType elementTypeOf="_141" id="_1411" name="Enumeration" />
 	
 	<!-- Entity -->
 	<Entity model="_1" id="_30" name="Entity" implements="_20"/>
@@ -81,14 +84,16 @@
 	<Attribute entity="_100" id="_103" name="packageName" />
 	<NamedType attribute="_103" id="_1031" name="String" />
 	
+	<!-- Enumeration -->
+	<Entity model="_1" id="_400" name="Enumeration" />
+	<Attribute entity="_400" id="_401" name="name" />
+	<NamedType attribute="_401" id="_4011" name="String" />
+	<Attribute entity="_400" id="_402" name="items" />
+	<CollectionType attribute="_402" id="_4021" type="LIST" />
+	<NamedType elementTypeOf="_4021" id="_40211" name="String" />
+	
 	<!-- CollectionTypeEnum -->
-	<Entity model="_1" id="_200" name="CollectionTypeEnum"/>
-	<Attribute entity="_200" id="_201" name="list" />
-	<NamedType attribute="_201" id="_2011" name="Boolean" />
-	<Attribute entity="_200" id="_202" name="set" />
-	<NamedType attribute="_202" id="_2021" name="Boolean" />
-	<Attribute entity="_200" id="_203" name="bag" />
-	<NamedType attribute="_203" id="_2031" name="Boolean" />
+	<Enumeration model="_1" id="_500" name="CollectionTypeEnum" items="List,Set,Bag"/>
 	
 	
 </Root>

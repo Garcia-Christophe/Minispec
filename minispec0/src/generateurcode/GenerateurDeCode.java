@@ -14,6 +14,7 @@ import metaModel.Attribute;
 import metaModel.CollectionType;
 import metaModel.CollectionTypeEnum;
 import metaModel.Entity;
+import metaModel.Enumeration;
 import metaModel.Interface;
 import metaModel.Model;
 import metaModel.NamedType;
@@ -291,6 +292,32 @@ public class GenerateurDeCode extends Visitor {
 			String classContent = "package " + packageName.replace("/", ".") + ";\n\n";
 			classContent += "public interface " + pascalizedName + "{\n\n";
 			classContent += "}\n";
+
+			writer.write(classContent);
+			writer.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	@Override
+	public void visitEnumeration(Enumeration e) {
+		String pascalizedName = pascalize(e.getName());
+		File javaFile = new File(packageDir.getPath() + "/" + pascalizedName + ".java");
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile.getPath(), false));
+
+			String classContent = "package " + packageName.replace("/", ".") + ";\n\n";
+			classContent += "public enum " + pascalizedName + " {\n";
+			classContent += "\t";
+			for (String item : e.getItems()) {
+				classContent += item.toUpperCase() + ", ";
+			}
+			if (!e.getItems().isEmpty()) {
+				classContent = classContent.substring(0, classContent.length() - 2);
+			}
+			classContent += "\n}\n";
 
 			writer.write(classContent);
 			writer.close();
