@@ -1,6 +1,9 @@
 package generateurcode;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -66,6 +69,15 @@ public class GenerateurDeCode extends Visitor {
 				extendContent = " extends " + e.getParentClassName();
 			}
 
+			// isValid method
+			methodsContent += "\tpublic static " + pascalizedName + " valueOf(Object obj) {\n";
+			methodsContent += "\t\ttry {\n";
+			methodsContent += "\t\t\treturn (" + pascalizedName + ") obj;\n";
+			methodsContent += "\t\t} catch (Exception e) {\n";
+			methodsContent += "\t\t\treturn null;\n";
+			methodsContent += "\t\t}\n";
+			methodsContent += "\t}\n\n";
+
 			String classContent = "package " + packageName.replace("/", ".") + ";\n\n";
 			classContent += importsContent + "\n";
 			classContent += "public class " + pascalizedName + extendContent + " {\n\n";
@@ -77,28 +89,29 @@ public class GenerateurDeCode extends Visitor {
 			writer.write(classContent);
 			writer.close();
 
-			//nouvelle entity ajoutée & writer et au reader du repository
-			repositoryWriterContent += "\t\t\t\tif (obj instanceof " + e.getName() + ") {\n" +
-					"\t\t\t\t\t" + e.getName() + " newInstance = (" + e.getName() + ") obj;\n" +
-					"\t\t\t\t\tinstanceString += \"\\t<" + e.getName();
+			// nouvelle entity ajoutée & writer et au reader du repository
+			repositoryWriterContent += "\t\t\t\tif (obj instanceof " + e.getName() + ") {\n" + "\t\t\t\t\t"
+					+ e.getName() + " newInstance = (" + e.getName() + ") obj;\n" + "\t\t\t\t\tinstanceString += \"\\t<"
+					+ e.getName();
 
-			repositoryReaderContent += "\t\t\t\t\tif (elem.getTagName().equals(\"" + e.getName() + "\")) {\n" +
-					"\t\t\t\t\t\t" + e.getName() + " newInstance = new " + e.getName() + "();\n";
+			repositoryReaderContent += "\t\t\t\t\tif (elem.getTagName().equals(\"" + e.getName() + "\")) {\n"
+					+ "\t\t\t\t\t\t" + e.getName() + " newInstance = new " + e.getName() + "();\n";
 
-			for (Attribute attr: e.getAttributes()) {
+			for (Attribute attr : e.getAttributes()) {
 				if (attr.getType() instanceof NamedType) {
 					attr.getType().accept(this);
-					//ajout des attributs de l'entity au writer et au reader de repository
-					repositoryWriterContent += " " + attr.getName() + "=\\\"\" + newInstance.get" + pascalize(attr.getName()) + "() + \"\\\"";
+					// ajout des attributs de l'entity au writer et au reader de repository
+					repositoryWriterContent += " " + attr.getName() + "=\\\"\" + newInstance.get"
+							+ pascalize(attr.getName()) + "() + \"\\\"";
 
-					repositoryReaderContent += "\t\t\t\t\t\tnewInstance.set" + pascalize(attr.getName()) + "(" + pascalize(attributeType) + ".valueOf(elem.getAttribute(\"" + attr.getName() + "\")));\n";
+					repositoryReaderContent += "\t\t\t\t\t\tnewInstance.set" + pascalize(attr.getName()) + "("
+							+ pascalize(attributeType) + ".valueOf(elem.getAttribute(\"" + attr.getName() + "\")));\n";
 				}
 			}
-			//fin de l'entity au writer et au reader de repository
-			repositoryWriterContent += "/>\\n\";\n\t\t\t\t}\n";
 
-			repositoryReaderContent += "\t\t\t\t\t\tthis.addInstances(newInstance);\n" +
-					"\t\t\t\t\t}\n";
+			// fin de l'entity au writer et au reader de repository
+			repositoryWriterContent += "/>\\n\";\n\t\t\t\t}\n";
+			repositoryReaderContent += "\t\t\t\t\t\tthis.addInstances(newInstance);\n" + "\t\t\t\t\t}\n";
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -224,74 +237,39 @@ public class GenerateurDeCode extends Visitor {
 	public void generateRepository() {
 		try {
 			BufferedWriter br = new BufferedWriter(new FileWriter(packageDir.getPath() + "/Repository.java"));
-			String fileContent = "package " + this.packageName.replace("/", ".") + ";\n" +
-					"\n" +
-					"import org.w3c.dom.Document;\n" +
-					"import org.w3c.dom.Element;\n" +
-					"import org.w3c.dom.Node;\n" +
-					"import org.w3c.dom.NodeList;\n" +
-					"\n" +
-					"import javax.xml.parsers.DocumentBuilder;\n" +
-					"import javax.xml.parsers.DocumentBuilderFactory;\n" +
-					"import java.io.*;\n" +
-					"import java.util.ArrayList;\n" +
-					"import java.util.List;\n" +
-					"\n" +
-					"public class Repository {\n" +
-					"    List<Object> instances;\n" +
-					"\n" +
-					"    public Repository() {\n" +
-					"        instances = new ArrayList<>();\n" +
-					"    }\n" +
-					"\n" +
-					"    public void readFile(File f) {\n" +
-					"        try {\n" +
-					"            // création d'une fabrique de documents\n" +
-					"            DocumentBuilderFactory fabrique = DocumentBuilderFactory.newInstance();\n" +
-					"\n" +
-					"            // création d'un constructeur de documents\n" +
-					"            DocumentBuilder constructeur = fabrique.newDocumentBuilder();\n" +
-					"            Document document = constructeur.parse(new FileInputStream(f));\n" +
-					"            Element firstElement = document.getDocumentElement();\n" +
-					"            NodeList nodeList = firstElement.getChildNodes();\n" +
-					"            for (int i = 0; i < nodeList.getLength(); i++) {\n" +
-					"                Node node = nodeList.item(i);\n" +
-					"                if (node instanceof Element) {\n" +
-					"                    Element elem = (Element) node;\n" +
-					"//readers\n" +
-					"                }\n" +
-					"            }\n" +
-					"        } catch (Exception e) {\n" +
-					"            System.err.println(e);\n" +
-					"        }\n" +
-					"    }\n" +
-					"\n" +
-					"    public void writeFile(File f) {\n" +
-					"        try {\n" +
-					"            BufferedWriter bw = new BufferedWriter(new FileWriter(f.getPath(), false));\n" +
-					"            String instanceString = \"<Instance>\\n\";\n" +
-					"            for (Object obj : instances) {\n" +
-					"//writers\n" +
-					"            }\n" +
-					"            instanceString += \"</Instance>\";\n" +
-					"            bw.write(instanceString);\n" +
-					"            bw.close();\n" +
-					"        } catch (Exception e) {\n" +
-					"            System.err.println(e);\n" +
-					"        }\n" +
-					"    }\n" +
-					"\n" +
-					"    public void addInstances(Object instance) {\n" +
-					"        this.instances.add(instance);\n" +
-					"    }\n" +
-					"\n" +
-					"    public List<Object> getInstances() {\n" +
-					"        return this.instances;\n" +
-					"    }\n" +
-					"}\n";
+			String fileContent = "package " + this.packageName.replace("/", ".") + ";\n" + "\n"
+					+ "import org.w3c.dom.Document;\n" + "import org.w3c.dom.Element;\n" + "import org.w3c.dom.Node;\n"
+					+ "import org.w3c.dom.NodeList;\n" + "\n" + "import javax.xml.parsers.DocumentBuilder;\n"
+					+ "import javax.xml.parsers.DocumentBuilderFactory;\n" + "import java.io.*;\n"
+					+ "import java.util.ArrayList;\n" + "import java.util.List;\n" + "\n"
+					+ "public class Repository {\n" + "    List<Object> instances;\n" + "\n"
+					+ "    public Repository() {\n" + "        instances = new ArrayList<>();\n" + "    }\n" + "\n"
+					+ "    public void readFile(File f) {\n" + "        try {\n"
+					+ "            // création d'une fabrique de documents\n"
+					+ "            DocumentBuilderFactory fabrique = DocumentBuilderFactory.newInstance();\n" + "\n"
+					+ "            // création d'un constructeur de documents\n"
+					+ "            DocumentBuilder constructeur = fabrique.newDocumentBuilder();\n"
+					+ "            Document document = constructeur.parse(new FileInputStream(f));\n"
+					+ "            Element firstElement = document.getDocumentElement();\n"
+					+ "            NodeList nodeList = firstElement.getChildNodes();\n"
+					+ "            for (int i = 0; i < nodeList.getLength(); i++) {\n"
+					+ "                Node node = nodeList.item(i);\n"
+					+ "                if (node instanceof Element) {\n"
+					+ "                    Element elem = (Element) node;\n" + "//readers\n" + "                }\n"
+					+ "            }\n" + "        } catch (Exception e) {\n" + "            System.err.println(e);\n"
+					+ "        }\n" + "    }\n" + "\n" + "    public void writeFile(File f) {\n" + "        try {\n"
+					+ "            BufferedWriter bw = new BufferedWriter(new FileWriter(f.getPath(), false));\n"
+					+ "            String instanceString = \"<Instance>\\n\";\n"
+					+ "            for (Object obj : instances) {\n" + "//writers\n" + "            }\n"
+					+ "            instanceString += \"</Instance>\";\n" + "            bw.write(instanceString);\n"
+					+ "            bw.close();\n" + "        } catch (Exception e) {\n"
+					+ "            System.err.println(e);\n" + "        }\n" + "    }\n" + "\n"
+					+ "    public void addInstances(Object instance) {\n" + "        this.instances.add(instance);\n"
+					+ "    }\n" + "\n" + "    public List<Object> getInstances() {\n"
+					+ "        return this.instances;\n" + "    }\n" + "}\n";
 			br.write(fileContent);
 			br.close();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			System.err.println(e);
 		}
 	}
