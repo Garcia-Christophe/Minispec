@@ -1,8 +1,19 @@
 package prettyPrinter;
 
-import metaModel.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
-import java.io.*;
+import metaModel.ArrayType;
+import metaModel.Attribute;
+import metaModel.CollectionType;
+import metaModel.Entity;
+import metaModel.Enumeration;
+import metaModel.Interface;
+import metaModel.Model;
+import metaModel.NamedType;
+import metaModel.Visitor;
 
 public class PrettyPrinter extends Visitor {
 	File packageDir;
@@ -17,6 +28,7 @@ public class PrettyPrinter extends Visitor {
 	public PrettyPrinter() {
 		initContents();
 	}
+
 	public String result() {
 		return result;
 	}
@@ -32,8 +44,7 @@ public class PrettyPrinter extends Visitor {
 	public void visitPackage(Model e) {
 		String pascalizedName = pascalize(e.getPackageName());
 		File javaFile = new File(packageDir.getPath() + "/" + pascalizedName + ".mSpec");
-		try
-		{
+		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile.getPath(), false));
 
 			modelContent = "model " + pascalizedName + ":";
@@ -52,6 +63,10 @@ public class PrettyPrinter extends Visitor {
 	public void visitEntity(Entity e) {
 		if (e.getParentClassName() != null) {
 			extendContent = " subType of (" + pascalize(e.getParentClassName()) + ")";
+		} else if (e.getParentInterfaceName() != null) {
+			extendContent = " implements (" + pascalize(e.getParentInterfaceName()) + ")";
+		} else {
+			extendContent = "";
 		}
 
 		entitiesContent += "\n";
@@ -69,7 +84,7 @@ public class PrettyPrinter extends Visitor {
 			initValueContent = " := " + e.getInitialValue();
 		}
 
-		attributesContent += "\t\t" + e.getName() + ": " +  typeContent + initValueContent + "\n";
+		attributesContent += "\t\t" + e.getName() + ": " + typeContent + initValueContent + "\n";
 	}
 
 	@Override
@@ -81,7 +96,8 @@ public class PrettyPrinter extends Visitor {
 	public void visitCollectionType(CollectionType e) {
 		e.getElementType().accept(this);
 
-		typeContent = pascalize(e.getCollectionTypeEnum().toString().toLowerCase() )+ "[" + e.getMin() + " : " + e.getMax() + "] of " + typeContent;
+		typeContent = pascalize(e.getCollectionTypeEnum().toString().toLowerCase()) + "[" + e.getMin() + " : "
+				+ e.getMax() + "] of " + typeContent;
 	}
 
 	@Override
@@ -89,6 +105,22 @@ public class PrettyPrinter extends Visitor {
 		e.getElementType().accept(this);
 
 		typeContent = "Array[" + e.getSize() + "] of " + typeContent;
+	}
+
+	@Override
+	public void visitInterface(Interface e) {
+		System.out.println(e.getName());
+		entitiesContent += "\n";
+		entitiesContent += "\tinterface " + pascalize(e.getName()) + ":\n";
+		entitiesContent += "\tend_interface;\n";
+	}
+
+	@Override
+	public void visitEnumeration(Enumeration e) {
+		entitiesContent += "\n";
+		entitiesContent += "\tenumeration " + pascalize(e.getName()) + ":\n";
+		entitiesContent += "\t\titems: " + e.getItems() + "\n";
+		entitiesContent += "\tend_enumeration;\n";
 	}
 
 	private void initContents() {
