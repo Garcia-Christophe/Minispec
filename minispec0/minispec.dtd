@@ -1,4 +1,5 @@
-<!ELEMENT Root (Model | Entity | Attribute | NamedType | ArrayType | CollectionType)*>
+<!ELEMENT Root (Model | Interface | Entity | Attribute | NamedType | ArrayType | CollectionType | Enumeration)*>
+
 <!ATTLIST Root
 	model IDREF #REQUIRED
 >
@@ -9,12 +10,20 @@
 	name CDATA #REQUIRED
 >
 
+<!ELEMENT Interface EMPTY>
+<!ATTLIST Interface
+	model IDREF #REQUIRED
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+>
+
 <!ELEMENT Entity EMPTY>
 <!ATTLIST Entity
 	model IDREF #REQUIRED
 	id ID #REQUIRED
 	name CDATA #REQUIRED
 	subtypeof IDREF #IMPLIED
+	implements IDREF #IMPLIED
 >
 
 <!ELEMENT Attribute EMPTY>
@@ -49,4 +58,12 @@
 	max CDATA #IMPLIED
 	elementTypeOf IDREF #IMPLIED
 	attribute IDREF #IMPLIED
+>
+
+<!ELEMENT Enumeration EMPTY>
+<!ATTLIST Enumeration
+	model IDREF #REQUIRED
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	items CDATA #REQUIRED
 >
