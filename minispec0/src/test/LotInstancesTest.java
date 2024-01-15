@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,15 +58,13 @@ class LotInstancesTest {
 		repo.readFile(new File("SauvegardeInstances.xml"));
 
 		Satellite satFromFile = (Satellite) repo.getInstances().get(0);
-		assert (satFromFile.getId() == 1);
-		assert (satFromFile.getNom().equals("Patrick"));
+		assertEquals(1, satFromFile.getId());
+		assertEquals("Patrick", satFromFile.getNom());
 
 		Balise baliseFromFile = (Balise) repo.getInstances().get(1);
-		assert (baliseFromFile.getId() == 2);
-		assert (baliseFromFile.getNom().equals("Robert"));
-		assert (!baliseFromFile.getPleine());
-
-		// TODO: assert
+		assertEquals(2, baliseFromFile.getId());
+		assertEquals("Robert", baliseFromFile.getNom());
+		assertFalse(baliseFromFile.getPleine());
 	}
 
 }

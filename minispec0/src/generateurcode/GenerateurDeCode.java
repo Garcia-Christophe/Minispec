@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import metaModel.ArrayType;
 import metaModel.Attribute;
@@ -36,10 +37,12 @@ public class GenerateurDeCode extends Visitor {
 	String repositoryReaderContent;
 
 	Map<String, Primitive> primitives;
+	Map<String, String> entitiesParams;
 
 	public GenerateurDeCode() {
 		initContents();
 		this.primitives = new HashMap<>();
+		this.entitiesParams = new HashMap<>();
 		this.repositoryWriterContent = this.repositoryReaderContent = "";
 	}
 
@@ -107,7 +110,8 @@ public class GenerateurDeCode extends Visitor {
 
 			repositoryReaderContent += "\t\t\t\t\tif (elem.getTagName().equals(\"" + e.getName() + "\")) {\n"
 					+ "\t\t\t\t\t\t" + e.getName() + " newInstance = new " + e.getName() + "();\n";
-
+			String readerAttribute = "";
+			// Attributs de l'entité
 			for (Attribute attr : e.getAttributes()) {
 				if (attr.getType() instanceof NamedType) {
 					attr.getType().accept(this);
@@ -115,10 +119,15 @@ public class GenerateurDeCode extends Visitor {
 					repositoryWriterContent += attr.getName() + "=\\\"\" + newInstance.get" + pascalize(attr.getName())
 							+ "() + \"\\\" ";
 
-					repositoryReaderContent += "\t\t\t\t\t\tnewInstance.set" + pascalize(attr.getName()) + "("
+					readerAttribute += "\t\t\t\t\t\tnewInstance.set" + pascalize(attr.getName()) + "("
 							+ pascalize(attributeType) + ".valueOf(elem.getAttribute(\"" + attr.getName() + "\")));\n";
 				}
 			}
+			if (e.getParentClassName() != null) {
+				repositoryReaderContent += this.entitiesParams.get(e.getParentClassName());
+			}
+			repositoryReaderContent += readerAttribute;
+			this.entitiesParams.put(e.getName(), readerAttribute);
 
 			// fin de l'entity au writer et au reader de repository
 			repositoryWriterContent += "/>\\n\");\n\t\t\t\t}\n";
