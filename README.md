@@ -32,7 +32,7 @@ Minispec est un langage de modélisation pour générer du code.
 ## Les améliorations à faire
 
 - 4. Héritage et modèle :
-  - si une entité ajoute un attribut après la création de entités qui l'héritent, et que une de ces entités a déjà un attibut du même nom, alors les deux sont présents
+  - si une entité ajoute un attribut après la création de entités qui l'héritent, et que une de ces entités a déjà un attribut du même nom, alors les deux sont présents
 - 6. Lot d'instances :
   - permettre la sérialisation des collections/tableaux
 - 7. Rebouclage :
@@ -41,7 +41,7 @@ Minispec est un langage de modélisation pour générer du code.
 
 ## Autres informations
 
-- Mise en majusucule de la première lettre des classes
+- Mise en majuscule de la première lettre des classes
 - Nommage des getter et setter en PascalCase (ex: "getMonAttribut" et non "getmonAttribut")
 - Mise en miniscule des noms de packages (conventions Java)
 - Initialisation par défaut des collections et tableaux
