@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Root model="_1">
+	<Model id="_1" name="m2TIIla.exemple5" />
+	
+	<!-- MobilElement -->
+	<Entity model="_1" id="_10" name="MobilElement" subtypeof="_20" />
+	
+	<!-- Balise -->
+	<Entity model="_1" id="_20" name="Balise" subtypeof="_10" />
+</Root>

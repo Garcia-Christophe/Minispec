@@ -45,4 +45,4 @@ Minispec est un langage de modélisation pour générer du code.
 - Nommage des getter et setter en PascalCase (ex: "getMonAttribut" et non "getmonAttribut")
 - Mise en miniscule des noms de packages (conventions Java)
 - Initialisation par défaut des collections et tableaux
-- Import par défaut des collections
+- Import par défaut des collections, surcharge par le XML des primitives (définition personnalisée des imports)

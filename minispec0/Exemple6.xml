@@ -1,99 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- start : c'est l'id de l'expression racine -->
 <Root model="_1">
-	<Model id="_1" name="m2tiila.metaModeleGENERE" />
+	<Model id="_1" name="m2TIIla.exemple6" />
 	
-	<!-- Minispec -->
-	<Interface model="_1" id="_20" name="MiniSpec"/>
-	
-	<!-- TypeDesc -->
-	<Entity model="_1" id="_50" name="TypeDesc" implements="_20"/>
-	
-	<!-- Model -->
-	<Entity model="_1" id="_10" name="Model" implements="_20"/>
-	<Attribute entity="_10" id="_11" name="packageName" />
-	<NamedType attribute="_11" id="_111" name="String" />
-	<Attribute entity="_10" id="_12" name="entities" />
-	<CollectionType attribute="_12" id="_121" type="LIST" />
-	<NamedType elementTypeOf="_121" id="_1211" name="Entity" />
-	<Attribute entity="_10" id="_13" name="interfaces" />
-	<CollectionType attribute="_13" id="_131" type="LIST" />
-	<NamedType elementTypeOf="_131" id="_1311" name="Interface" />
-	<Attribute entity="_10" id="_14" name="enumerations" />
-	<CollectionType attribute="_14" id="_141" type="LIST" />
-	<NamedType elementTypeOf="_141" id="_1411" name="Enumeration" />
-	
-	<!-- Entity -->
-	<Entity model="_1" id="_30" name="Entity" implements="_20"/>
-	<Attribute entity="_30" id="_31" name="name" />
-	<NamedType attribute="_31" id="_311" name="String" />
-	<Attribute entity="_30" id="_32" name="attributes" />
-	<CollectionType attribute="_32" id="_321" type="LIST" />
-	<NamedType elementTypeOf="_321" id="_3211" name="Attribute" />
-	<Attribute entity="_30" id="_33" name="parentClassName" />
-	<NamedType attribute="_33" id="_331" name="String" />
-	<Attribute entity="_30" id="_34" name="parentInterfaceName" />
-	<NamedType attribute="_34" id="_341" name="String" />
-	
-	<!-- Interface -->
-	<Entity model="_1" id="_300" name="Interface" implements="_20"/>
-	<Attribute entity="_300" id="_301" name="name" />
-	<NamedType attribute="_301" id="_3011" name="String" />
-	
-	<!-- Attribute -->
-	<Entity model="_1" id="_40" name="Attribute" implements="_20"/>
-	<Attribute entity="_40" id="_41" name="type" />
-	<NamedType attribute="_41" id="_411" name="TypeDesc" />
-	<Attribute entity="_40" id="_42" name="name" />
-	<NamedType attribute="_42" id="_421" name="String" />
-	<Attribute entity="_40" id="_43" name="initialValue" />
-	<NamedType attribute="_43" id="_431" name="String" />
-	
-	<!-- Visitor -->
-	<Entity model="_1" id="_60" name="Visitor"/>
-	
-	<!-- NamedType -->
-	<Entity model="_1" id="_70" name="NamedType" subtypeof="_50"/>
-	<Attribute entity="_70" id="_71" name="name" />
-	<NamedType attribute="_71" id="_711" name="String" />
-	
-	<!-- ArrayType -->
-	<Entity model="_1" id="_80" name="ArrayType" subtypeof="_50"/>
-	<Attribute entity="_80" id="_81" name="size" />
-	<NamedType attribute="_81" id="_811" name="Integer" />
-	<Attribute entity="_80" id="_82" name="elementType" />
-	<NamedType attribute="_82" id="_821" name="TypeDesc" />
-	
-	<!-- CollectionType -->
-	<Entity model="_1" id="_90" name="CollectionType" subtypeof="_50"/>
-	<Attribute entity="_90" id="_91" name="min" />
-	<NamedType attribute="_91" id="_911" name="Integer" />
-	<Attribute entity="_90" id="_92" name="max" />
-	<NamedType attribute="_92" id="_921" name="Integer" />
-	<Attribute entity="_90" id="_93" name="elementType" />
-	<NamedType attribute="_93" id="_931" name="TypeDesc" />
-	<Attribute entity="_90" id="_94" name="collectionTypeEnum" />
-	<NamedType attribute="_94" id="_941" name="CollectionTypeEnum" />
-	
-	<!-- Attribute -->
-	<Entity model="_1" id="_100" name="Primitive" implements="_20"/>
-	<Attribute entity="_100" id="_101" name="name" />
-	<NamedType attribute="_101" id="_1011" name="String" />
-	<Attribute entity="_100" id="_102" name="type" />
-	<NamedType attribute="_102" id="_1021" name="String" />
-	<Attribute entity="_100" id="_103" name="packageName" />
-	<NamedType attribute="_103" id="_1031" name="String" />
-	
-	<!-- Enumeration -->
-	<Entity model="_1" id="_400" name="Enumeration" />
-	<Attribute entity="_400" id="_401" name="name" />
-	<NamedType attribute="_401" id="_4011" name="String" />
-	<Attribute entity="_400" id="_402" name="items" />
-	<CollectionType attribute="_402" id="_4021" type="LIST" />
-	<NamedType elementTypeOf="_4021" id="_40211" name="String" />
-	
-	<!-- CollectionTypeEnum -->
-	<Enumeration model="_1" id="_500" name="CollectionTypeEnum" items="List,Set,Bag"/>
-	
-	
+	<!-- Balise -->
+	<Entity model="_1" id="_20" name="Balise" />
+	<Attribute entity="_20" id="_21" name="pleine" init="false" />
+	<NamedType attribute="_21" id="_211" name="boolean" />
+	<Attribute entity="_20" id="_22" name="satellitesArray" />
+	<ArrayType attribute="_22" id="_221" size="20" />
+	<NamedType elementTypeOf="_221" id="_2211" name="Satellite" />
+
+	<!-- Satellite -->
+	<Entity model="_1" id="_30" name="Satellite" />
+	<Attribute entity="_30" id="_31" name="idMaintainers" init="new int[] {2, 5, 6, 8, 10}" />
+	<ArrayType attribute="_31" id="_311" size="5" />
+	<NamedType elementTypeOf="_311" id="_3111" name="int" />
 </Root>

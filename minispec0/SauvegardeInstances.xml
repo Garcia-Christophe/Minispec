@@ -1,0 +1,6 @@
+<Instances>
+	<MobilElement nom="Patrick" id="1"/>
+	<Satellite/>
+	<MobilElement nom="Robert" id="2"/>
+	<Balise pleine="false"/>
+</Instances>

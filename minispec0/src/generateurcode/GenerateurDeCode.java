@@ -266,9 +266,9 @@ public class GenerateurDeCode extends Visitor {
 					+ "            }\n" + "        } catch (Exception e) {\n" + "            System.err.println(e);\n"
 					+ "        }\n" + "    }\n" + "\n" + "    public void writeFile(File f) {\n" + "        try {\n"
 					+ "            BufferedWriter bw = new BufferedWriter(new FileWriter(f.getPath(), false));\n"
-					+ "            String instanceString = \"<Instance>\\n\";\n"
+					+ "            String instanceString = \"<Instances>\\n\";\n"
 					+ "            for (Object obj : instances) {\n" + "//writers\n" + "            }\n"
-					+ "            instanceString += \"</Instance>\";\n" + "            bw.write(instanceString);\n"
+					+ "            instanceString += \"</Instances>\";\n" + "            bw.write(instanceString);\n"
 					+ "            bw.close();\n" + "        } catch (Exception e) {\n"
 					+ "            System.err.println(e);\n" + "        }\n" + "    }\n" + "\n"
 					+ "    public void addInstances(Object instance) {\n" + "        this.instances.add(instance);\n"
@@ -290,7 +290,7 @@ public class GenerateurDeCode extends Visitor {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile.getPath(), false));
 
 			String classContent = "package " + packageName.replace("/", ".") + ";\n\n";
-			classContent += "public interface " + pascalizedName + "{\n\n";
+			classContent += "public interface " + pascalizedName + " {\n\n";
 			classContent += "}\n";
 
 			writer.write(classContent);

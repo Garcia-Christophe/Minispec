@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- start : c'est l'id de l'expression racine -->
 <Root model="_1">
-	<!-- chaque element a un identifiant unique (attribut id) -->
-	<!-- Pour associer deux expressions on utilise l'identifiant -->
-	<!-- 	exemple : le model de l'entite _30 est pointé par son attribut model avec _1  -->
-	<Model id="_1" name="m2tILAl.monpackage"/>
-	<Entity model="_1" id="_20" name="Balise"/>
-	<Entity model="_1" id="_30" name="Satellite"/>
+	<Model id="_1" name="m2TIIla.exemple2"/>
+	
+	<!-- Balise -->
+	<Entity model="_1" id="_2" name="Balise"/>
+	
+	<!-- Satellite -->
+	<Entity model="_1" id="_3" name="Satellite"/>
 </Root>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Root model="_1">
+	<Model id="_1" name="m2TIIla.exemple5" />
+	
+	<!-- MobilElement -->
+	<Entity model="_1" id="_10" name="MobilElement" />
+	<Attribute entity="_10" id="_11" name="id" />
+	<NamedType attribute="_11" id="_111" name="Integer" />
+	
+	<!-- Balise -->
+	<Entity model="_1" id="_20" name="Balise" subtypeof="_10" />
+	<Attribute entity="_20" id="_21" name="id" />
+	<NamedType attribute="_21" id="_211" name="Integer" />
+</Root>
