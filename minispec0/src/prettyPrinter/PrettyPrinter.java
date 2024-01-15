@@ -109,7 +109,6 @@ public class PrettyPrinter extends Visitor {
 
 	@Override
 	public void visitInterface(Interface e) {
-		System.out.println(e.getName());
 		entitiesContent += "\n";
 		entitiesContent += "\tinterface " + pascalize(e.getName()) + ":\n";
 		entitiesContent += "\tend_interface;\n";
