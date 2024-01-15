@@ -97,9 +97,13 @@ public class GenerateurDeCode extends Visitor {
 			writer.close();
 
 			// nouvelle entity ajoutée & writer et au reader du repository
-			repositoryWriterContent += "\t\t\t\tif (obj instanceof " + e.getName() + ") {\n" + "\t\t\t\t\t"
-					+ e.getName() + " newInstance = (" + e.getName() + ") obj;\n" + "\t\t\t\t\tinstanceString += \"\\t<"
-					+ e.getName();
+			repositoryWriterContent += "\t\t\t\tif (obj instanceof " + e.getName() + ") {\n";
+			if (e.getParentClassName() != null) {
+				repositoryWriterContent += "\t\t\t\t\tString lastLine = stack.pop();\n";
+				repositoryWriterContent += "\t\t\t\t\tparentAttributes = lastLine.substring(parentClassName.length() + 3, lastLine.length() - 3);\n";
+			}
+			repositoryWriterContent += "\t\t\t\t\t" + e.getName() + " newInstance = (" + e.getName() + ") obj;\n"
+					+ "\t\t\t\t\tstack.push(\"\\t<" + e.getName() + " \" + parentAttributes + \"";
 
 			repositoryReaderContent += "\t\t\t\t\tif (elem.getTagName().equals(\"" + e.getName() + "\")) {\n"
 					+ "\t\t\t\t\t\t" + e.getName() + " newInstance = new " + e.getName() + "();\n";
@@ -108,8 +112,8 @@ public class GenerateurDeCode extends Visitor {
 				if (attr.getType() instanceof NamedType) {
 					attr.getType().accept(this);
 					// ajout des attributs de l'entity au writer et au reader de repository
-					repositoryWriterContent += " " + attr.getName() + "=\\\"\" + newInstance.get"
-							+ pascalize(attr.getName()) + "() + \"\\\"";
+					repositoryWriterContent += attr.getName() + "=\\\"\" + newInstance.get" + pascalize(attr.getName())
+							+ "() + \"\\\" ";
 
 					repositoryReaderContent += "\t\t\t\t\t\tnewInstance.set" + pascalize(attr.getName()) + "("
 							+ pascalize(attributeType) + ".valueOf(elem.getAttribute(\"" + attr.getName() + "\")));\n";
@@ -117,7 +121,7 @@ public class GenerateurDeCode extends Visitor {
 			}
 
 			// fin de l'entity au writer et au reader de repository
-			repositoryWriterContent += "/>\\n\";\n\t\t\t\t}\n";
+			repositoryWriterContent += "/>\\n\");\n\t\t\t\t}\n";
 			repositoryReaderContent += "\t\t\t\t\t\tthis.addInstances(newInstance);\n" + "\t\t\t\t\t}\n";
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -248,7 +252,7 @@ public class GenerateurDeCode extends Visitor {
 					+ "import org.w3c.dom.Document;\n" + "import org.w3c.dom.Element;\n" + "import org.w3c.dom.Node;\n"
 					+ "import org.w3c.dom.NodeList;\n" + "\n" + "import javax.xml.parsers.DocumentBuilder;\n"
 					+ "import javax.xml.parsers.DocumentBuilderFactory;\n" + "import java.io.*;\n"
-					+ "import java.util.ArrayList;\n" + "import java.util.List;\n" + "\n"
+					+ "import java.util.ArrayList;\n" + "import java.util.List;\n" + "import java.util.Stack;\n" + "\n"
 					+ "public class Repository {\n" + "    List<Object> instances;\n" + "\n"
 					+ "    public Repository() {\n" + "        instances = new ArrayList<>();\n" + "    }\n" + "\n"
 					+ "    public void readFile(File f) {\n" + "        try {\n"
@@ -265,15 +269,20 @@ public class GenerateurDeCode extends Visitor {
 					+ "                    Element elem = (Element) node;\n" + "//readers\n" + "                }\n"
 					+ "            }\n" + "        } catch (Exception e) {\n" + "            System.err.println(e);\n"
 					+ "        }\n" + "    }\n" + "\n" + "    public void writeFile(File f) {\n" + "        try {\n"
-					+ "            BufferedWriter bw = new BufferedWriter(new FileWriter(f.getPath(), false));\n"
-					+ "            String instanceString = \"<Instances>\\n\";\n"
-					+ "            for (Object obj : instances) {\n" + "//writers\n" + "            }\n"
-					+ "            instanceString += \"</Instances>\";\n" + "            bw.write(instanceString);\n"
-					+ "            bw.close();\n" + "        } catch (Exception e) {\n"
-					+ "            System.err.println(e);\n" + "        }\n" + "    }\n" + "\n"
-					+ "    public void addInstances(Object instance) {\n" + "        this.instances.add(instance);\n"
-					+ "    }\n" + "\n" + "    public List<Object> getInstances() {\n"
-					+ "        return this.instances;\n" + "    }\n" + "}\n";
+					+ "            f.delete();\n"
+					+ "            BufferedWriter bw = new BufferedWriter(new FileWriter(f.getPath(), true));\n"
+					+ "            Stack<String> stack = new Stack<>();\n\n"
+					+ "            for (Object obj : instances) {\n"
+					+ "               String parentClassName = obj.getClass().getSuperclass().getSimpleName();\n"
+					+ "               String parentAttributes = \"\";\n\n" + "//writers\n" + "            }\n"
+					+ "            // Écriture du contenu du fichier\n" + "            bw.write(\"<Instances>\\n\");\n"
+					+ "            for (String line : stack) {\n" + "               bw.write(line);\n"
+					+ "            }\n" + "            bw.write(\"</Instances>\\n\");\n" + "            bw.close();\n"
+					+ "        } catch (Exception e) {\n" + "            System.err.println(e);\n" + "        }\n"
+					+ "    }\n" + "\n" + "    public void addInstances(Object instance) {\n"
+					+ "        this.instances.add(instance);\n" + "    }\n" + "\n"
+					+ "    public List<Object> getInstances() {\n" + "        return this.instances;\n" + "    }\n"
+					+ "}\n";
 			br.write(fileContent);
 			br.close();
 		} catch (Exception e) {

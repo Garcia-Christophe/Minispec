@@ -42,10 +42,8 @@ class LotInstancesTest {
 		try {
 			repositoryContent = Files.readString(Path.of("SauvegardeInstances.xml"));
 			assertTrue(repositoryContent.contains("<Instances>"));
-			assertTrue(repositoryContent.contains("<MobilElement nom=\"Patrick\" id=\"1\"/>"));
-			assertTrue(repositoryContent.contains("<Satellite/>"));
-			assertTrue(repositoryContent.contains("<MobilElement nom=\"Robert\" id=\"2\"/>"));
-			assertTrue(repositoryContent.contains("<Balise pleine=\"false\"/>"));
+			assertTrue(repositoryContent.contains("<Satellite nom=\"Patrick\" id=\"1\" />"));
+			assertTrue(repositoryContent.contains("<Balise nom=\"Robert\" id=\"2\" pleine=\"false\" />"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -56,7 +54,7 @@ class LotInstancesTest {
 		// Matérialisation des instances sauvegardées
 		Repository repo = new Repository();
 		repo.readFile(new File("SauvegardeInstances.xml"));
-		System.out.println(repo.getInstances());
+
 		Satellite satFromFile = (Satellite) repo.getInstances().get(0);
 		assert (satFromFile.getId() == 1);
 		assert (satFromFile.getNom().equals("Patrick"));
